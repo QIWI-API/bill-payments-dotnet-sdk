@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Qiwi.BillPayments.Client;
 using Qiwi.BillPayments.Json;
 using Qiwi.BillPayments.Json.Newtonsoft;
@@ -21,30 +21,35 @@ namespace Qiwi.BillPayments.Tests.Client
             public FakeClient Client { get; set; }
         }
         
-        private static IReadOnlyDictionary<BillPaymentsClient, FakeApiPresets> _fakeDataRows;
+        private readonly IReadOnlyDictionary<BillPaymentsClient, FakeApiPresets> fakeDataRows
+            = (IReadOnlyDictionary<BillPaymentsClient, FakeApiPresets>) _testContext.Properties["fakeDataRows"];
         
         private static void ClassInitialize_Fake()
         {
-            _fakeDataRows = new Dictionary<BillPaymentsClient, FakeApiPresets>(
-            new[]
-                {
-                    new FakeClient(ObjectMapperFactory.create()),
-                    new FakeClient(ObjectMapperFactory.create<NewtonsoftMapper>())
-                }
-                .Select(fakeClient => new KeyValuePair<BillPaymentsClient, FakeApiPresets>(
-                    BillPaymentsClientFactory.create(Config.MerchantSecretKey, fakeClient, fakeClient.ObjectMapper),
-                    new FakeApiPresets
+            _testContext.Properties.Add(
+                "fakeDataRows",
+                new Dictionary<BillPaymentsClient, FakeApiPresets>(
+                new[]
                     {
-                        Client = fakeClient,
-                        Bills = new List<BillResponse>(),
-                        Refunds = new List<RefundResponse>()
+                        new FakeClient(ObjectMapperFactory.create()),
+                        new FakeClient(ObjectMapperFactory.create<NewtonsoftMapper>())
                     }
-                ))
+                    .Select(fakeClient => new KeyValuePair<BillPaymentsClient, FakeApiPresets>(
+                        BillPaymentsClientFactory.create(Config.MerchantSecretKey, fakeClient, fakeClient.ObjectMapper),
+                        new FakeApiPresets
+                        {
+                            Client = fakeClient,
+                            Bills = new List<BillResponse>(),
+                            Refunds = new List<RefundResponse>()
+                        }
+                    ))
+                )
             );
         }
         
-        [Test]
-        [Order(1)]
+        [TestMethod]
+        [Priority(1)]
+        [DataRow("200.345", "RUB", "test", "test@test.ru", "user uid on your side", "79999999999", "http://test.ru/")]
         public void TestCreateBill_Fake(
             string value,
             string currency,
@@ -56,17 +61,17 @@ namespace Qiwi.BillPayments.Tests.Client
         )
         {
             // Prepare
-            foreach (var (client, presets) in _fakeDataRows)
+            foreach (var (client, presets) in fakeDataRows)
             {
                 var fingerprint = client.getFingerprint();
                 PrepareBill(
-                    "200.345",
-                    "RUB",
-                    "test",
-                    "test@test.ru",
-                    "user uid on your side",
-                    "79999999999",
-                    "http://test.ru/",
+                    value,
+                    currency,
+                    comment,
+                    email,
+                    account,
+                    phone,
+                    successUrl,
                     out var createBillInfo
                 );
                 var billResponse = new BillResponse
@@ -76,7 +81,7 @@ namespace Qiwi.BillPayments.Tests.Client
                     Comment = createBillInfo.Comment,
                     ExpirationDateTime = createBillInfo.ExpirationDateTime,
                     Customer = createBillInfo.Customer,
-                    PayUrl = _payUri,
+                    PayUrl = PayUri,
                     Status = new ResponseStatus
                     {
                         ValueEnum = BillStatusEnum.Waiting,
@@ -99,13 +104,14 @@ namespace Qiwi.BillPayments.Tests.Client
             }
         }
         
-        [Test]
-        [Order(2)]
+        [TestMethod]
+        [Priority(2)]
         public void TestGetBillInfo_Fake()
         {
             // Prepare
-            foreach (var (client, presets) in _fakeDataRows)
+            foreach (var (client, presets) in fakeDataRows)
             {
+                Assert.AreNotSame(0, presets.Bills.Count, "Bill will be create");
                 foreach (var bill in presets.Bills)
                 {
                     
@@ -120,13 +126,14 @@ namespace Qiwi.BillPayments.Tests.Client
             }
         }
         
-        [Test]
-        [Order(3)]
+        [TestMethod]
+        [Priority(3)]
         public void TestCancelBill_Fake()
         {
             // Prepare
-            foreach (var (client, presets) in _fakeDataRows)
+            foreach (var (client, presets) in fakeDataRows)
             {
+                Assert.AreNotSame(0, presets.Bills.Count, "Bill will be create");
                 foreach (var bill in presets.Bills)
                 {
                     var fingerprint = client.getFingerprint();
@@ -160,16 +167,17 @@ namespace Qiwi.BillPayments.Tests.Client
             }
         }
         
-        [Test]
-        [Order(1)]
-        public void TestRefundBill_Fake()
+        [TestMethod]
+        [Priority(1)]
+        [DataRow("0.01", "RUB")]
+        public void TestRefundBill_Fake(string amount, string currency)
         {
             // Prepare
-            foreach (var (client, presets) in _fakeDataRows)
+            foreach (var (client, presets) in fakeDataRows)
             {
                 PrepareRefund(
-                    "0.01",
-                    "RUB",
+                    amount,
+                    currency,
                     out var refundId,
                     out var moneyAmount
                 );
@@ -191,15 +199,17 @@ namespace Qiwi.BillPayments.Tests.Client
             }
         }
         
-        [Test]
-        [Order(2)]
+        [TestMethod]
+        [Priority(2)]
         public void TestGetRefundInfo_Fake()
         {
             // Prepare
-            foreach (var (client, presets) in _fakeDataRows)
+            foreach (var (client, presets) in fakeDataRows)
             {
+                Assert.AreNotSame(0, presets.Bills.Count, "Refund will be create");
                 foreach (var refund in presets.Refunds)
                 {
+                    ResetClient(presets.Client, refund);
                     // Test
                     presets.Client.OnRequest += TestGetRefundInfo_OnRequest;
                     var refundResponse = client.getRefundInfo(Config.BillIdForRefundTest, refund.RefundId);

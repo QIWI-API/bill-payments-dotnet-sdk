@@ -1,6 +1,6 @@
 # Universal payments API .Net SDK
 
-[![Build Status](https://travis-ci.com/QIWI-API/bill-payments-dotnet-sdk.svg?branch=master)](https://travis-ci.com/QIWI-API/bill-payments-dotnet-sdk)
+[![Build Status](https://travis-ci.org/QIWI-API/bill-payments-dotnet-sdk.svg?branch=master)](https://travis-ci.org/QIWI-API/bill-payments-dotnet-sdk)
 [![Release Version](https://img.shields.io/nuget/v/Qiwi.BillPayments.svg)](https://www.nuget.org/packages/Qiwi.BillPayments/)
 [![Downloads](https://img.shields.io/nuget/dt/Qiwi.BillPayments.svg)](https://www.nuget.org/packages/Qiwi.BillPayments/)
 
@@ -23,9 +23,9 @@ nuget install Qiwi.BillPayments
 Для использования SDK требуется `secretKey`, подробности в [документации](https://developer.qiwi.com/ru/bill-payments/#auth).
 
 ```c#
-string secretKey = "eyJ2ZXJzaW9uIjoicmVzdF92MyIsImRhdGEiOnsibWVyY2hhbnRfaWQiOjUyNjgxMiwiYXBpX3VzZXJfaWQiOjcxNjI2MTk3LCJzZWNyZXQiOiJmZjBiZmJiM2UxYzc0MjY3YjIyZDIzOGYzMDBkNDhlYjhiNTnONPININONPN090MTg5Z**********************";
+var secretKey = "eyJ2ZXJzaW9uIjoicmVzdF92MyIsImRhdGEiOnsibWVyY2hhbnRfaWQiOjUyNjgxMiwiYXBpX3VzZXJfaWQiOjcxNjI2MTk3LCJzZWNyZXQiOiJmZjBiZmJiM2UxYzc0MjY3YjIyZDIzOGYzMDBkNDhlYjhiNTnONPININONPN090MTg5Z**********************";
 
-BillPaymentClient client = BillPaymentClientFactory.createDefault(secretKey);
+var client = BillPaymentClientFactory.createDefault(secretKey);
 ```
 
 ## Примеры
@@ -48,17 +48,17 @@ BillPaymentClient client = BillPaymentClientFactory.createDefault(secretKey);
 Подробнее о доступных параметрах в [документации](https://developer.qiwi.com/ru/bill-payments/#http).
 
 ```c#
-string publicKey = "2tbp1WQvsgQeziGY9vTLe9vDZNg7tmCymb4Lh6STQokqKrpCC6qrUUKEDZAJ7mvFnzr1yTebUiQaBLDnebLMMxL8nc6FF5zfmGQnypdXCbQJqHEJW5RJmKfj8nvgc";
+var publicKey = "2tbp1WQvsgQeziGY9vTLe9vDZNg7tmCymb4Lh6STQokqKrpCC6qrUUKEDZAJ7mvFnzr1yTebUiQaBLDnebLMMxL8nc6FF5zfmGQnypdXCbQJqHEJW5RJmKfj8nvgc";
 
-MoneyAmount amount = new MoneyAmount(
-    499.9m,
-    Currency.getInstance("RUB")
-);
-string billId = Guid.NewGuid().ToString();
-string successUrl = "https://merchant.com/payment/success?billId=893794793973";
+var amount = new MoneyAmount
+{
+    ValueDecimal = 499.9m,
+    CurrencyEnum = CurrencyEnum.Rub
+};
+var billId = Guid.NewGuid().ToString();
+var successUrl = "https://merchant.com/payment/success?billId=893794793973";
 
-string paymentUrl = client.createPaymentForm(new PaymentInfo(key, amount, billId, successUrl));
-
+var paymentUrl = client.createPaymentForm(new PaymentInfo(key, amount, billId, successUrl));
 ```
 
 В результате:
@@ -83,25 +83,28 @@ https://oplata.qiwi.com/create?amount=499.90&customFields%5BapiClient%5D=java_sd
 Подробнее о доступных параметрах в [документации](https://developer.qiwi.com/ru/bill-payments/#create).
 
 ```c#
-CreateBillInfo billInfo = new CreateBillInfo(
-    Guid.NewGuid().ToString(),
-    new MoneyAmount(
-        199.9m,
-        Currency.getInstance("RUB")
-    ),
-    "comment",
-    DateTime.Now.AddDays(45),
-    new Customer(
-        "example@mail.org",
-        Guid.NewGuid().ToString(),
-        "79123456789"
-    ),
-    "http://merchant.ru/success"
-);
-BillResponse response = client.createBill(billInfo);
+var billInfo = new CreateBillInfo
+{
+    BillId = Guid.NewGuid().ToString(),
+    Amount = new MoneyAmount
+    {
+        ValueDecimal = 199.9m,
+        CurrencyEnum = CurrencyEnum.Rub
+    },
+    Comment = "comment",
+    ExpirationDateTime = DateTime.Now.AddDays(45),
+    Customer = new Customer
+    {
+        Email = "example@mail.org",
+        Account = Guid.NewGuid().ToString(),
+        Phone = "79123456789"
+    },
+    SuccessUrl = new Uri("http://merchant.ru/success")
+};
+var response = client.createBill(billInfo);
 ```
 
-Вывод:
+Ответ:
 
 ```json
 {
@@ -138,9 +141,9 @@ BillResponse response = client.createBill(billInfo);
 Подробнее в [документации](https://developer.qiwi.com/ru/bill-payments/#invoice-status).
 
 ```c#
-string billId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71";
+var billId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71";
 
-BillResponse response = client.getBillInfo(billId);
+var response = client.getBillInfo(billId);
 ```
 
 Ответ:
@@ -180,9 +183,9 @@ BillResponse response = client.getBillInfo(billId);
 Подробнее в [документации](https://developer.qiwi.com/ru/bill-payments/#cancel).
 
 ```c#
-string billId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71";
+var billId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71";
 
-BillResponse response = client.cancelBill(billId);
+var response = client.cancelBill(billId);
 ```
 
 Ответ:
@@ -226,14 +229,15 @@ BillResponse response = client.cancelBill(billId);
 Подробнее в [документации](https://developer.qiwi.com/ru/bill-payments/#refund).
 
 ```c#
-string billId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71";
-string refundId = Guid.NewGuid().ToString();
-MoneyAmount amount = new MoneyAmount(
-    104.9m,
-    Currency.getInstance("RUB")
-);
+var billId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71";
+var refundId = Guid.NewGuid().ToString();
+var amount = new MoneyAmount
+{
+    ValueDecimal = 104.9m,
+    CurrencyEnum = CurrencyEnum.Rub
+};
 
-RefundResponse refundResponse = client.refundBill(paidBillId, refundId, amount);
+var refundResponse = client.refundBill(paidBillId, refundId, amount);
 ```
 
 В результате будет получен ответ c информацией о возврате:
@@ -259,10 +263,10 @@ RefundResponse refundResponse = client.refundBill(paidBillId, refundId, amount);
 Подробнее в [документации](https://developer.qiwi.com/ru/bill-payments/#refund-status).
 
 ```c#
-string billId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71";
-string refundId = "3444e8ca-cf68-4dbd-92ee-f68c4bf8f29b";
+var billId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71";
+var refundId = "3444e8ca-cf68-4dbd-92ee-f68c4bf8f29b";
 
-RefundResponse response = client.getRefundInfo(paidBillId, refundId);
+var response = client.getRefundInfo(paidBillId, refundId);
 ```
 
 В результате будет получен ответ c информацией о возврате:
@@ -285,45 +289,79 @@ RefundResponse response = client.getRefundInfo(paidBillId, refundId);
 Метод `checkNotificationSignature` осуществляет проверку подписи при нотификации о новом счете от сервера уведомлений QIWI. Принимает на вход подпись из входящего запроса, объект - тело запроса и secret ключ, с помощью которого должна осуществляться подпись:
 
 ```c#
-string merchantSecret = "test-merchant-secret-for-signature-check";
-Notification notification = new Notification(
-    new Bill(
-        "test",
-        "test_bill",
-        new MoneyAmount(
-            1m,
-            Currency.getInstance("RUB")
-        ),
-        BillStatus.PAID
+var merchantSecret = "test-merchant-secret-for-signature-check";
+var notification = new Notification
+{
+    Bill = new Bill
+    {
+        SiteId = "test",
+        BillId = "test_bill",
+        Amount = new MoneyAmount
+        {
+            ValueDecimal = 1m,
+            CurrencyEnum = CurrencyEnum.Rub
+        },
+        Status = new BillStatus
+        {
+            ValueEnum = BillStatusEnum.Paid
+        }
     ),
-    "3"
-);
-String validSignature = "07e0ebb10916d97760c196034105d010607a6c6b7d72bfa1c3451448ac484a3b";
+    Version = "1"
+};
+var validSignature = "07e0ebb10916d97760c196034105d010607a6c6b7d72bfa1c3451448ac484a3b";
 
 BillPaymentsUtils.checkNotificationSignature(validSignature, notification, merchantSecret); //true
 ```
 
-### Использование альтернативного HTTP-клиента
+### Использование альтернативного обработчика JSON
 
-По умолчанию для отправки HTTP-запросов используется `System.Net.Http.HttpClient`, но можно воспользоваться любым другим, реализовав интерфейс `WebClient`.
+По умолчанию для работы с JSON используется `System.Runtime.Serialization.Json.DataContractJsonSerializer`, но можно воспользоваться любым другим, реализовав интерфейс `IObjectMapper`.
 
 ```c#
-public interface WebClient {
+public interface IClient {
+    string writeValue(object entityOpt);
+    T readValue<T>(string body);
+}
+```
+
+Примером реализации является `ContractObjectMapper`, принимающий `System.Runtime.Serialization.Json.DataContractJsonSerializerSettings` для конфигурации совместимости формата дат.
+
+```c#
+BillPaymentClient client = BillPaymentClientFactory.create(
+    secretKey,
+    null,
+    ObjectMapperFactory.create<ContractObjectMapper>(
+        new DataContractJsonSerializerSettings
+        {
+            DateTimeFormat = new DateTimeFormat(BillPaymentsClient.DatetimeFormat)
+        }
+    )
+);
+```
+
+Проект **Qiwi.BillPayments.Json.Newtonsoft** предоставляет обработчик JSON на освнове пакета [Newtonsoft.Json](https://www.newtonsoft.com/json).
+
+### Использование альтернативного HTTP-клиента
+
+По умолчанию для отправки HTTP-запросов используется `System.Net.Http.HttpClient`, но можно воспользоваться любым другим, реализовав интерфейс `IClient`.
+
+```c#
+public interface IClient {
     ResponseData request(
         string method,
         string url,
-        string entityOpt,
-        Dictionary<string, string> headers
+        IReadOnlyDictionary<string, string> headers,
+        string entityOpt = null
     );
 }
 ```
 
-Примером реализации является `CoreWebClient`, принимающий `System.Net.Http.HttpClient` произвольной конфигурации.
+Примером реализации является `NetClient`, принимающий `System.Net.Http.HttpClient` произвольной конфигурации.
 
 ```c#
-BillPaymentClient client = BillPaymentClientFactory.createCustom(
+BillPaymentClient client = BillPaymentClientFactory.create(
     secretKey,
-    new CoreWebClient(new HttpClient())
+    ClientFactory.create<NetClient>(new HttpClient())
 );
 ```
 

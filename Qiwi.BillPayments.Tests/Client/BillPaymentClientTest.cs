@@ -1,6 +1,8 @@
 using System;
+using System.Net.Mail;
+using System.Runtime.CompilerServices;
 using System.Web;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Qiwi.BillPayments.Client;
 using Qiwi.BillPayments.Model;
 using Qiwi.BillPayments.Model.In;
@@ -12,24 +14,30 @@ namespace Qiwi.BillPayments.Tests.Client
 {
     public partial class BillPaymentClientTest
     {
-        private static Uri _payUri;
+        private static Uri PayUri => (Uri) _testContext.Properties["payUri"];
+
+        private static TestContext _testContext;
         
-        [SetUp]
+        [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            _payUri = new Uri("https://oplata.qiwi.com/form/?invoice_uid=bb773791-9bd9-42c1-b8fc-3358cd108422");
+            _testContext = testContext;
+            _testContext.Properties.Add(
+                "payUri",
+                new Uri("https://oplata.qiwi.com/form/?invoice_uid=bb773791-9bd9-42c1-b8fc-3358cd108422")
+            );
             ClassInitialize_Api();
             ClassInitialize_Fake();
         }
         
-        [Test]
-        public void TestAppendSuccessUrl()
+        [TestMethod]
+        [DataRow("http://test.ru/")]
+        public void TestAppendSuccessUrl(string successUrl)
         {
             // Prepare
-            const string successUrl = "http://test.ru/";
             var baseBillResponse = new BillResponse
             {
-                PayUrl = _payUri
+                PayUrl = PayUri
             };
             // Test
             var billResponse = BillPaymentsClient.appendSuccessUrl(baseBillResponse, new Uri(successUrl));

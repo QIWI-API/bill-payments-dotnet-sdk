@@ -11,7 +11,6 @@ namespace Qiwi.BillPayments.Model
     [ComVisible(true)]
     public class BillStatusEnum : StringEnum<BillStatusEnum>
     {
-        
         [ComVisible(true)]
         public static BillStatusEnum Waiting => new BillStatusEnum("WAITING");
         

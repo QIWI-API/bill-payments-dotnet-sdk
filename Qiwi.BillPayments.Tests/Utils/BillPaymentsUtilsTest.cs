@@ -1,47 +1,65 @@
 using System;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Qiwi.BillPayments.Model;
 using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Tests.Utils
 {
-    [TestFixture]
+    [TestClass]
     public class BillPaymentsUtilsTest
     {
-        [Test]
-        public void TestFormatValue()
+        [TestMethod]
+        [DataRow("200.345", "200.34")]
+        public void TestFormatValue(string iValue, string oValue)
         {
-            var value = BillPaymentsUtils.formatValue("200.345");
-            Assert.AreEqual("200.34", value, "Equal format value");
+            var value = BillPaymentsUtils.formatValue(iValue);
+            Assert.AreEqual(oValue, value, "Equal format value");
         }
 
-        [Test]
-        public void TestGetTimeoutDate()
+        [TestMethod]
+        [DataRow(45, null)]
+        [DataRow(1, 1.0)]
+        public void TestGetTimeoutDate(int offset, double? days)
         {
-            var value = BillPaymentsUtils.getTimeoutDate();
+            var value = BillPaymentsUtils.getTimeoutDate(days);
             Assert.IsTrue(DateTime.Now < value, "Timeout date in future");
-            Assert.AreEqual(45, (value - DateTime.Now).Days + 1, "Timeout date offset");   
+            Assert.AreEqual(offset, (value - DateTime.Now).Days + 1, "Timeout date offset");   
         }
         
-        [Test]
-        public void TestCheckNotificationSignature()
+        [TestMethod]
+        [DataRow(
+            "test-merchant-secret-for-signature-check",
+            "07e0ebb10916d97760c196034105d010607a6c6b7d72bfa1c3451448ac484a3b",
+            "test",
+            "test_bill",
+            "1.00",
+            "RUB",
+            "PAID"
+        )]
+        public void TestCheckNotificationSignature(
+            string merchantSecret,
+            string signature,
+            string siteId,
+            string billId,
+            string value,
+            string currency,
+            string status
+        )
         {
-            const string merchantSecret = "test-merchant-secret-for-signature-check";
-            const string signature = "07e0ebb10916d97760c196034105d010607a6c6b7d72bfa1c3451448ac484a3b";
             var notification = new Notification
             {
                 Bill = new Bill
                 {
-                    SiteId = "test",
-                    BillId = "test_bill",
+                    SiteId = siteId,
+                    BillId = billId,
                     Amount = new MoneyAmount
                     {
-                        ValueString = "1.00",
-                        CurrencyString = "RUB"
+                        ValueString = value,
+                        CurrencyString = currency
                     },
                     Status = new BillStatus
                     {
-                        ValueString = "PAID"
+                        ValueString = status
                     }
                 }
             };

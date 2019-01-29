@@ -8,6 +8,7 @@ using Qiwi.BillPayments.Client;
 
 namespace Qiwi.BillPayments.Json
 {
+    /// <inheritdoc/>
     /// <summary>
     /// Data contract JSON serializer mapper.
     /// https://docs.microsoft.com/en-us/dotnet/api/system.runtime.serialization.json.datacontractjsonserializer?view=netcore-2.0
@@ -16,7 +17,8 @@ namespace Qiwi.BillPayments.Json
     public class ContractObjectMapper : IObjectMapper
     {
         private readonly DataContractJsonSerializerSettings settings;
-
+        
+        /// <inheritdoc/>
         /// <summary>
         /// The constructor.
         /// </summary>

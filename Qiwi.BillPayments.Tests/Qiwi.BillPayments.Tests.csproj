@@ -18,7 +18,7 @@
       <ProjectReference Include="../Qiwi.BillPayments/Qiwi.BillPayments.csproj" />
     </ItemGroup>
     
-    <ItemGroup>
+    <ItemGroup Condition="Exists('App.config')">
         <None Include="App.config" />
     </ItemGroup>
 

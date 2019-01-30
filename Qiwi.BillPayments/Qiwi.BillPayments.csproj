@@ -1,66 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <Choose>
-        <When Condition="$(CI) == 'true'">
-            <PropertyGroup>
-                <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
-                <RootNamespace>Qiwi.BillPayments</RootNamespace>
-                <AssemblyName>Qiwi.BillPayments</AssemblyName>
-                <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-                <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-                <PackageVersion>0.0.1</PackageVersion>
-                <Company>QIWI JSC</Company>
-                <Authors>Yaraslav &lt;yaroslav@wannabe.pro&gt;</Authors>
-                <Product>Universal payments API SDK</Product>
-                <Description>QIWI Bill Payments API opens a way to operations with invoices from your service or application. Invoice is the unique request for the payment. The user may pay the invoice with any accessible means. API supports issuing and cancelling invoices, making refunds and checking operation status.</Description>
-                <Copyright>Copyright © QIWI JSC 2019</Copyright>
-                <PackageProjectUrl>https://developer.qiwi.com/ru/bill-payments/</PackageProjectUrl>
-                <PackageLicenseFile>LICENSE</PackageLicenseFile>
-                <RepositoryUrl>https://github.com/QIWI-API/bill-payments-dotcore-sdk.git</RepositoryUrl>
-                <NeutralLanguage>en</NeutralLanguage>
-                <RepositoryType>git</RepositoryType>
-                <PackageTags>qiwi sdk</PackageTags>
-                <PackageId>Qiwi.BillPayments</PackageId>
-                <PackageIconUrl>https://avatars1.githubusercontent.com/u/29546240?s=140</PackageIconUrl>
-                <ProductVersion>0.0.1</ProductVersion>
-                <FileVersion>0.0.1</FileVersion>
-                <AssemblyVersion>0.0.1</AssemblyVersion>
-                <AssemblyTitle>QIWI SDK</AssemblyTitle>
-            </PropertyGroup>
-        </When>
-        <Otherwise>
-            <PropertyGroup>
-                <TargetFrameworks>netstandard2.0;netcoreapp2.0;net45</TargetFrameworks>
-                <RootNamespace>Qiwi.BillPayments</RootNamespace>
-                <AssemblyName>Qiwi.BillPayments</AssemblyName>
-                <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-                <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-                <PackageVersion>0.0.1</PackageVersion>
-                <Company>QIWI JSC</Company>
-                <Authors>Yaraslav &lt;yaroslav@wannabe.pro&gt;</Authors>
-                <Product>Universal payments API SDK</Product>
-                <Description>QIWI Bill Payments API opens a way to operations with invoices from your service or application. Invoice is the unique request for the payment. The user may pay the invoice with any accessible means. API supports issuing and cancelling invoices, making refunds and checking operation status.</Description>
-                <Copyright>Copyright © QIWI JSC 2019</Copyright>
-                <PackageProjectUrl>https://developer.qiwi.com/ru/bill-payments/</PackageProjectUrl>
-                <PackageLicenseFile>LICENSE</PackageLicenseFile>
-                <RepositoryUrl>https://github.com/QIWI-API/bill-payments-dotcore-sdk.git</RepositoryUrl>
-                <NeutralLanguage>en</NeutralLanguage>
-                <RepositoryType>git</RepositoryType>
-                <PackageTags>qiwi sdk</PackageTags>
-                <PackageId>Qiwi.BillPayments</PackageId>
-                <PackageIconUrl>https://avatars1.githubusercontent.com/u/29546240?s=140</PackageIconUrl>
-                <ProductVersion>0.0.1</ProductVersion>
-                <FileVersion>0.0.1</FileVersion>
-                <AssemblyVersion>0.0.1</AssemblyVersion>
-                <AssemblyTitle>QIWI SDK</AssemblyTitle>
-            </PropertyGroup>
-        </Otherwise>
-    </Choose>
+    
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netcoreapp2.0;net45</TargetFrameworks>
+        <RootNamespace>Qiwi.BillPayments</RootNamespace>
+        <AssemblyName>Qiwi.BillPayments</AssemblyName>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PackageVersion>0.0.1</PackageVersion>
+        <Company>QIWI JSC</Company>
+        <Authors>Yaraslav &lt;yaroslav@wannabe.pro&gt;</Authors>
+        <Product>Universal payments API SDK</Product>
+        <Description>QIWI Bill Payments API opens a way to operations with invoices from your service or application. Invoice is the unique request for the payment. The user may pay the invoice with any accessible means. API supports issuing and cancelling invoices, making refunds and checking operation status.</Description>
+        <Copyright>Copyright © QIWI JSC 2019</Copyright>
+        <PackageProjectUrl>https://developer.qiwi.com/ru/bill-payments/</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <RepositoryUrl>https://github.com/QIWI-API/bill-payments-dotcore-sdk.git</RepositoryUrl>
+        <NeutralLanguage>en</NeutralLanguage>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>qiwi sdk</PackageTags>
+        <PackageId>Qiwi.BillPayments</PackageId>
+        <PackageIconUrl>https://avatars1.githubusercontent.com/u/29546240?s=140</PackageIconUrl>
+        <ProductVersion>0.0.1</ProductVersion>
+        <FileVersion>0.0.1</FileVersion>
+        <AssemblyVersion>0.0.1</AssemblyVersion>
+        <AssemblyTitle>QIWI SDK</AssemblyTitle>
+    </PropertyGroup>
     
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Build|AnyCPU'">
         <Optimize>true</Optimize>
     </PropertyGroup>
-
+    
     <ItemGroup>
       <Content Include="..\LICENSE">
           <PackagePath />
@@ -68,10 +37,10 @@
           <Link>LICENSE</Link>
       </Content>
     </ItemGroup>
-
+    
     <ItemGroup>
       <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net45'" />
       <Reference Include="System.Web" Condition="'$(TargetFramework)' == 'net45'" />
     </ItemGroup>
-
+    
 </Project>

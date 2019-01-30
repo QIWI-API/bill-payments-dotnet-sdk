@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+    
     <PropertyGroup>
         <TargetFramework>netcoreapp2.0</TargetFramework>
-
+        
         <IsPackable>false</IsPackable>
     </PropertyGroup>
-
+    
     <ItemGroup>
         <PackageReference Include="nunit" Version="3.10.1" />
         <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
         <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0-preview.18571.3" />
     </ItemGroup>
-
+    
     <ItemGroup>
       <ProjectReference Include="../Qiwi.BillPayments.Json.Newtonsoft/Qiwi.BillPayments.Json.Newtonsoft.csproj" />
       <ProjectReference Include="../Qiwi.BillPayments/Qiwi.BillPayments.csproj" />
@@ -21,5 +21,5 @@
     <ItemGroup Condition="Exists('App.config')">
         <None Include="App.config" />
     </ItemGroup>
-
+    
 </Project>

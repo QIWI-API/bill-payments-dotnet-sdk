@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Web;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using NUnit.Framework.Internal;
 using Qiwi.BillPayments.Client;
 using Qiwi.BillPayments.Json;
 using Qiwi.BillPayments.Json.Newtonsoft;
@@ -11,8 +12,8 @@ using Qiwi.BillPayments.Model.Out;
 
 namespace Qiwi.BillPayments.Tests.Client
 {
-    [TestClass]
-    public partial class BillPaymentClientTest
+    [TestFixture]
+    public class BillPaymentClientApiTest : BillPaymentClientTestCase
     {
         private class ApiPresets
         {
@@ -20,42 +21,37 @@ namespace Qiwi.BillPayments.Tests.Client
             public List<RefundResponse> Refunds { get; set; }
         }
         
-        private static IReadOnlyDictionary<BillPaymentsClient, ApiPresets> ApiDataRows
-            => (Dictionary<BillPaymentsClient, ApiPresets>) _testContext.Properties["apiDataRows"];
-        
-        private static void ClassInitialize_Api()
-        {
-            _testContext.Properties.Add(
-                "apiDataRows",
-                new Dictionary<BillPaymentsClient, ApiPresets>
+        private static readonly IReadOnlyDictionary<BillPaymentsClient, ApiPresets> ApiDataRows
+            = new Dictionary<BillPaymentsClient, ApiPresets>
+            {
                 {
+                    BillPaymentsClientFactory.create(Config.MerchantSecretKey),
+                    new ApiPresets
                     {
-                        BillPaymentsClientFactory.create(Config.MerchantSecretKey),
-                        new ApiPresets
-                        {
-                            Bills = new List<BillResponse>(),
-                            Refunds = new List<RefundResponse>()
-                        }
-                    },
+                        Bills = new List<BillResponse>(),
+                        Refunds = new List<RefundResponse>()
+                    }
+                },
+                {
+                    BillPaymentsClientFactory.create(
+                        Config.MerchantSecretKey,
+                        null,
+                        ObjectMapperFactory.create<NewtonsoftMapper>()
+                    ),
+                    new ApiPresets
                     {
-                        BillPaymentsClientFactory.create(
-                            Config.MerchantSecretKey,
-                            null,
-                            ObjectMapperFactory.create<NewtonsoftMapper>()
-                        ),
-                        new ApiPresets
-                        {
-                            Bills = new List<BillResponse>(),
-                            Refunds = new List<RefundResponse>()
-                        }
+                        Bills = new List<BillResponse>(),
+                        Refunds = new List<RefundResponse>()
                     }
                 }
-            );
-        }
+            };
         
-        [TestMethod]
-        [DataRow("200.345", "http://test.ru/")]
-        public void TestCreatePaymentForm(string value, string successUrl)
+        [Test]
+        [Sequential]
+        public void TestCreatePaymentForm(
+            [Values("200.345")] string value,
+            [Values("http://test.ru/")] string successUrl
+        )
         {
             // Prepare
             foreach (var (client, _) in ApiDataRows)
@@ -85,17 +81,17 @@ namespace Qiwi.BillPayments.Tests.Client
             }
         }
         
-        [TestMethod]
-        [Priority(1)]
-        [DataRow("200.345", "RUB", "test", "test@test.ru", "user uid on your side", "79999999999", "http://test.ru/")]
+        [Test]
+        [Sequential]
+        [Order(1)]
         public void TestCreateBill_Api(
-            string value,
-            string currency,
-            string comment,
-            string email,
-            string account,
-            string phone,
-            string successUrl
+            [Values("200.345")] string value,
+            [Values("RUB")] string currency,
+            [Values("test")] string comment,
+            [Values("test@test.ru")] string email,
+            [Values("user uid on your side")] string account,
+            [Values("79999999999")] string phone,
+            [Values("http://test.ru/")] string successUrl
         )
         {
             Config.Required();
@@ -121,8 +117,8 @@ namespace Qiwi.BillPayments.Tests.Client
             }
         }
         
-        [TestMethod]
-        [Priority(2)]
+        [Test]
+        [Order(2)]
         public void TestGetBillInfo_Api()
         {
             Config.Required();
@@ -140,8 +136,8 @@ namespace Qiwi.BillPayments.Tests.Client
             }
         }
         
-        [TestMethod]
-        [Priority(3)]
+        [Test]
+        [Order(3)]
         public void TestCancelBill_Api()
         {
             Config.Required();
@@ -159,10 +155,13 @@ namespace Qiwi.BillPayments.Tests.Client
             }
         }
         
-        [TestMethod]
-        [Priority(1)]
-        [DataRow("0.01", "RUB")]
-        public void TestRefundBill_Api(string amount, string currency)
+        [Test]
+        [Order(1)]
+        [Sequential]
+        public void TestRefundBill_Api(
+            [Values("0.01")] string amount,
+            [Values("RUB")] string currency
+        )
         {
             Config.Required();
             // Prepare
@@ -182,8 +181,8 @@ namespace Qiwi.BillPayments.Tests.Client
             }
         }
         
-        [TestMethod]
-        [Priority(2)]
+        [Test]
+        [Order(2)]
         public void TestGetRefundInfo_Api()
         {
             Config.Required();

@@ -1,6 +1,6 @@
 using System.Configuration;
 using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Qiwi.BillPayments.Tests
 {
@@ -20,13 +20,9 @@ namespace Qiwi.BillPayments.Tests
         
         public static void Required()
         {
-            try
+            if (!ConfigIsLoaded())
             {
-                Assert.IsTrue(ConfigIsLoaded(), "Test required config");
-            }
-            catch (UnitTestAssertException exception)
-            {
-                throw new AssertInconclusiveException(exception.Message, exception);
+                Assert.Ignore("Test required config");
             }
         }
         

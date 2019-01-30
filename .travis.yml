@@ -1,7 +1,22 @@
+sudo: required
+dist: trusty
 language: csharp
-mono: none
-dotnet: 2.1.500
+solution: bill-payments-dotnet-sdk.sln
+mono: 5.12.0
+dotnet: 2.1.503
 install:
+- export FrameworkPathOverride=$(dirname $(which mono))/../lib/mono/4.5/
+- dotnet restore bill-payments-dotnet-sdk.sln
 - if [[ $TRAVIS_PULL_REQUEST = 'false' && $TRAVIS_BRANCH = 'master' ]]; then openssl aes-256-cbc -K $encrypted_35f90653928635e2_key -iv $encrypted_35f90653928635e2_iv -in Qiwi.BillPayments.Tests/App.config.enc -out Qiwi.BillPayments.Tests/App.config -d; fi
 script:
-- dotnet test -c Release bill-payments-dotnet-sdk.sln
+- msbuild /t:Rebuild /p:Configuration=Release bill-payments-dotnet-sdk.sln
+- dotnet test bill-payments-dotnet-sdk.sln
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: nuget push ./Qiwi.BillPayments.*.nupkg -Verbosity detailed -ApiKey $ApiKey -Source https://api.nuget.org/v3/index.json
+  on:
+    tags: true
+    branches:
+      only:
+        - master

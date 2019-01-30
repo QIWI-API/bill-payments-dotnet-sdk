@@ -12,7 +12,6 @@
         <Product>Universal payments API SDK</Product>
         <Description>QIWI Bill Payments API opens a way to operations with invoices from your service or application. Invoice is the unique request for the payment. The user may pay the invoice with any accessible means. API supports issuing and cancelling invoices, making refunds and checking operation status.</Description>
         <Copyright>Copyright © QIWI JSC 2019</Copyright>
-        <PackageProjectUrl>https://developer.qiwi.com/ru/bill-payments/</PackageProjectUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <RepositoryUrl>https://github.com/QIWI-API/bill-payments-dotcore-sdk.git</RepositoryUrl>
         <NeutralLanguage>en</NeutralLanguage>

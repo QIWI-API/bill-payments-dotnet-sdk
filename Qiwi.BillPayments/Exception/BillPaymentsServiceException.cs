@@ -17,13 +17,13 @@ namespace Qiwi.BillPayments.Exception
         /// The API response.
         /// </summary>
         [ComVisible(true)]
-        public readonly ErrorResponse response;
+        public readonly ErrorResponse Response;
         
         /// <summary>
         /// The HTTP status code.
         /// </summary>
         [ComVisible(true)]
-        public readonly HttpStatusCode httpStatus;
+        public readonly HttpStatusCode HttpStatus;
         
         /// <inheritdoc />
         /// <summary>
@@ -34,8 +34,8 @@ namespace Qiwi.BillPayments.Exception
         public BillPaymentsServiceException(ErrorResponse response, HttpStatusCode httpStatus)
             : base(response.UserMessage)
         {
-            this.response = response;
-            this.httpStatus = httpStatus;
+            Response = response;
+            HttpStatus = httpStatus;
         }
     }
 }

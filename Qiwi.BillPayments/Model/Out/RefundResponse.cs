@@ -1,15 +1,17 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Model.Out
 {
+    /// <inheritdoc />
     /// <summary>
     /// The refund response.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
-    public class RefundResponse
+    public class RefundResponse : FieldsDictionary
     {
         /// <summary>
         /// The invoice amount.
@@ -23,11 +25,11 @@ namespace Qiwi.BillPayments.Model.Out
         }
         
         /// <summary>
-        /// The datetime of refund processing.
+        /// The dateTime of refund processing.
         /// </summary>
         [ComVisible(true)]
-        [DataMember(Name = "datetime")]
-        public DateTime Datetime
+        [DataMember(Name = "dateTime")]
+        public DateTime DateTime
         {
             get;
             set;

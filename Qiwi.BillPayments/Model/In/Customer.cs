@@ -1,14 +1,16 @@
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Model.In
 {
+    /// <inheritdoc />
     /// <summary>
     /// The customer's info.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
-    public class Customer
+    public class Customer : FieldsDictionary
     {
         /// <summary>
         /// The client's e-mail.

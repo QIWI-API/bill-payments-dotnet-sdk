@@ -17,9 +17,9 @@ namespace Qiwi.BillPayments.Utils
         /// <param name="args">The constructor arguments.</param>
         /// <returns>The object.</returns>
         [ComVisible(true)]
-        public static TD create(params object[] args)
+        public static TD Create(params object[] args)
         {
-            return create<TD>(args);
+            return Create<TD>(args);
         }
         
         /// <summary>
@@ -29,7 +29,7 @@ namespace Qiwi.BillPayments.Utils
         /// <typeparam name="T">The object type.</typeparam>
         /// <returns>The object.</returns>
         [ComVisible(true)]
-        public static T create<T>(params object[] args) where T : class, TI
+        public static T Create<T>(params object[] args) where T : class, TI
         {
             try
             {

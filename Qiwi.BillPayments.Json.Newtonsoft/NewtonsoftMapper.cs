@@ -12,13 +12,13 @@ namespace Qiwi.BillPayments.Json.Newtonsoft
     [ComVisible(true)]
     public class NewtonsoftMapper : IObjectMapper
     {
-        private readonly JsonSerializerSettings settings;
+        private readonly JsonSerializerSettings _settings;
         
         /// <inheritdoc />
         public NewtonsoftMapper() : this(
             new JsonSerializerSettings
             {
-                DateFormatString = BillPaymentsClient.DatetimeFormat
+                DateFormatString = BillPaymentsClient.DateTimeFormat
             }
         )
         {
@@ -30,21 +30,21 @@ namespace Qiwi.BillPayments.Json.Newtonsoft
         /// <param name="settings">The JSON serializer settings.</param>
         public NewtonsoftMapper(JsonSerializerSettings settings)
         {
-            this.settings = settings;
+            _settings = settings;
         }
         
         /// <inheritdoc />
         [ComVisible(true)]
-        public string writeValue(object entityOpt)
+        public string WriteValue(object entityOpt)
         {
-            return JsonConvert.SerializeObject(entityOpt, settings);
+            return JsonConvert.SerializeObject(entityOpt, _settings);
         }
         
         /// <inheritdoc />
         [ComVisible(true)]
-        public T readValue<T>(string entityOpt)
+        public T ReadValue<T>(string entityOpt)
         {
-            return JsonConvert.DeserializeObject<T>(entityOpt, settings);
+            return JsonConvert.DeserializeObject<T>(entityOpt, _settings);
         }
     }
 }

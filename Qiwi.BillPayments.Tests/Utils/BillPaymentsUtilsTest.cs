@@ -12,7 +12,7 @@ namespace Qiwi.BillPayments.Tests.Utils
         [DataRow("200.345", "200.34")]
         public void TestFormatValue(string iValue, string oValue)
         {
-            var value = BillPaymentsUtils.formatValue(iValue);
+            var value = BillPaymentsUtils.FormatValue(iValue);
             Assert.AreEqual(oValue, value, "Equal format value");
         }
 
@@ -21,7 +21,7 @@ namespace Qiwi.BillPayments.Tests.Utils
         [DataRow(1, 1.0)]
         public void TestGetTimeoutDate(int offset, double? days)
         {
-            var value = BillPaymentsUtils.getTimeoutDate(days);
+            var value = BillPaymentsUtils.GetTimeoutDate(days);
             Assert.IsTrue(DateTime.Now < value, "Timeout date in future");
             Assert.AreEqual(offset, (value - DateTime.Now).Days + 1, "Timeout date offset");   
         }
@@ -64,11 +64,11 @@ namespace Qiwi.BillPayments.Tests.Utils
                 }
             };
             Assert.IsFalse(
-                BillPaymentsUtils.checkNotificationSignature("foo", notification, merchantSecret),
+                BillPaymentsUtils.CheckNotificationSignature("foo", notification, merchantSecret),
                 "Invalid signature check fails"
             );
             Assert.IsTrue(
-                BillPaymentsUtils.checkNotificationSignature(signature, notification, merchantSecret),
+                BillPaymentsUtils.CheckNotificationSignature(signature, notification, merchantSecret),
                 "Valid signature check success"
             );
         }

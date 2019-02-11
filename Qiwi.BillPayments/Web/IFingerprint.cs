@@ -13,13 +13,13 @@ namespace Qiwi.BillPayments.Web
         /// </summary>
         /// <returns>The API client name.</returns>
         [ComVisible(true)]
-        string getClientName();
+        string GetClientName();
         
         /// <summary>
         /// Get the API client version.
         /// </summary>
         /// <returns>The API client version.</returns>
         [ComVisible(true)]
-        string getClientVersion();
+        string GetClientVersion();
     }
 }

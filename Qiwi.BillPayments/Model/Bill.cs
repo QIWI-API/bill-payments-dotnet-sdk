@@ -1,14 +1,16 @@
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Model
 {
+    /// <inheritdoc />
     /// <summary>
     /// The invoice info.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
-    public class Bill
+    public class Bill : FieldsDictionary
     {
         /// <summary>
         /// The merchant’s site identifier.

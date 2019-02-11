@@ -1,4 +1,5 @@
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,8 +8,9 @@ namespace Qiwi.BillPayments.Tests
     public static class Config
     {
         private static KeyValueConfigurationCollection Configuration { get; }
-            = loadConfiguration(Assembly.GetExecutingAssembly());
+            = LoadConfiguration(Assembly.GetExecutingAssembly());
         
+        [SuppressMessage("ReSharper", "StringLiteralTypo")]
         public static string MerchantPublicKey
             => Configuration?["MerchantPublicKey"]?.Value ?? "Fnzr1yTebUiQaBLDnebLMMxL8nc6FF5zfmGQnypc*******";
         
@@ -26,7 +28,7 @@ namespace Qiwi.BillPayments.Tests
             }
         }
         
-        private static KeyValueConfigurationCollection loadConfiguration(Assembly assembly)
+        private static KeyValueConfigurationCollection LoadConfiguration(Assembly assembly)
         {
             try
             {

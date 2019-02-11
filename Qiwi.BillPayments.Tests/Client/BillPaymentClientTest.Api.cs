@@ -30,7 +30,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 new Dictionary<BillPaymentsClient, ApiPresets>
                 {
                     {
-                        BillPaymentsClientFactory.create(Config.MerchantSecretKey),
+                        BillPaymentsClientFactory.Create(Config.MerchantSecretKey),
                         new ApiPresets
                         {
                             Bills = new List<BillResponse>(),
@@ -38,10 +38,10 @@ namespace Qiwi.BillPayments.Tests.Client
                         }
                     },
                     {
-                        BillPaymentsClientFactory.create(
+                        BillPaymentsClientFactory.Create(
                             Config.MerchantSecretKey,
                             null,
-                            ObjectMapperFactory.create<NewtonsoftMapper>()
+                            ObjectMapperFactory.Create<NewtonsoftMapper>()
                         ),
                         new ApiPresets
                         {
@@ -71,7 +71,7 @@ namespace Qiwi.BillPayments.Tests.Client
                     SuccessUrl = new Uri(successUrl)
                 };
                 // Test
-                var uri = client.createPaymentForm(paymentInfo);
+                var uri = client.CreatePaymentForm(paymentInfo);
                 var query = HttpUtility.ParseQueryString(uri.Query);
                 // Assert
                 Assert.AreEqual("https", uri.Scheme, "Get create form correct scheme");
@@ -102,7 +102,7 @@ namespace Qiwi.BillPayments.Tests.Client
             // Prepare
             foreach (var (client, presets) in ApiDataRows)
             {
-                var fingerprint = client.getFingerprint();
+                var fingerprint = client.GetFingerprint();
                 PrepareBill(
                     value,
                     currency,
@@ -114,7 +114,7 @@ namespace Qiwi.BillPayments.Tests.Client
                     out var createBillInfo
                 );
                 // Test
-                var billResponse = client.createBill(createBillInfo);
+                var billResponse = client.CreateBill(createBillInfo);
                 presets.Bills.Add(billResponse);
                 // Assert
                 TestCreateBill_Assert(createBillInfo, fingerprint, billResponse);
@@ -133,7 +133,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 foreach (var bill in presets.Bills)
                 {
                     // Test
-                    var billResponse = client.getBillInfo(bill.BillId);
+                    var billResponse = client.GetBillInfo(bill.BillId);
                     // Assert
                     TestGetBillInfo_Assert(bill, billResponse);
                 }
@@ -152,7 +152,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 foreach (var bill in presets.Bills)
                 {
                     // Test
-                    var billResponse = client.cancelBill(bill.BillId);
+                    var billResponse = client.CancelBill(bill.BillId);
                     // Assert
                     TestCancelBill_Assert(bill, billResponse);
                 }
@@ -175,7 +175,7 @@ namespace Qiwi.BillPayments.Tests.Client
                     out var moneyAmount
                 );
                 // Test
-                var refundResponse = client.refundBill(Config.BillIdForRefundTest, refundId, moneyAmount);
+                var refundResponse = client.RefundBill(Config.BillIdForRefundTest, refundId, moneyAmount);
                 presets.Refunds.Add(refundResponse);
                 // Assert
                 TestRefundBill_Assert(refundId, moneyAmount, refundResponse);
@@ -194,7 +194,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 foreach (var refund in presets.Refunds)
                 {
                     // Test
-                    var refundResponse = client.getRefundInfo(Config.BillIdForRefundTest, refund.RefundId);
+                    var refundResponse = client.GetRefundInfo(Config.BillIdForRefundTest, refund.RefundId);
                     // Assert
                     TestGetRefundInfo_Assert(refund, refundResponse);
                 }

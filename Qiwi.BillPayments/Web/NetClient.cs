@@ -18,7 +18,7 @@ namespace Qiwi.BillPayments.Web
     [ComVisible(true)]
     public class NetClient : IClient
     {
-        private readonly HttpClient httpClient;
+        private readonly HttpClient _httpClient;
 
         /// <inheritdoc />
         /// <summary>
@@ -34,16 +34,16 @@ namespace Qiwi.BillPayments.Web
         /// <param name="httpClient">The real HTTP client.</param>
         public NetClient(HttpClient httpClient)
         {
-            this.httpClient = httpClient;
+            _httpClient = httpClient;
         }
         
         /// <inheritdoc />
         [ComVisible(true)]
-        public ResponseData request(
+        public ResponseData Request(
             string method,
             string url,
             IReadOnlyDictionary<string, string> headers,
-            string entityOpt = null
+            [Optional] string entityOpt
         )
         {
             Uri uri;
@@ -79,7 +79,7 @@ namespace Qiwi.BillPayments.Web
                 }
                 propfindHttpRequestMessage.Content =
                     new StringContent(entityOpt ?? "", Encoding.GetEncoding(contentType.CharSet ?? "utf-8"), contentType.MediaType);
-                var propfindHttpResponseMessage = httpClient.SendAsync(propfindHttpRequestMessage).Result;
+                var propfindHttpResponseMessage = _httpClient.SendAsync(propfindHttpRequestMessage).Result;
                 return new ResponseData
                 {
                     Body = Encoding.UTF8.GetString(propfindHttpResponseMessage.Content.ReadAsByteArrayAsync().Result),

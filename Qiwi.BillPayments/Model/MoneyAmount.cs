@@ -4,12 +4,13 @@ using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Model
 {
+    /// <inheritdoc />
     /// <summary>
     /// The invoice amount info.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
-    public class MoneyAmount
+    public class MoneyAmount : FieldsDictionary
     {
         /// <summary>
         /// The invoice amount value.
@@ -18,8 +19,8 @@ namespace Qiwi.BillPayments.Model
         [DataMember(Name = "value")]
         public string ValueString
         {
-            get => BillPaymentsUtils.formatValue(ValueDecimal);
-            set => ValueDecimal = BillPaymentsUtils.evenValue(value);
+            get => BillPaymentsUtils.FormatValue(ValueDecimal);
+            set => ValueDecimal = BillPaymentsUtils.EvenValue(value);
         }
         
         /// <summary>
@@ -40,7 +41,7 @@ namespace Qiwi.BillPayments.Model
         [DataMember(Name = "currency")]
         public string CurrencyString
         {
-            get => CurrencyEnum.value;
+            get => CurrencyEnum.Value;
             set => CurrencyEnum = CurrencyEnum.Parse(value);
         }
         

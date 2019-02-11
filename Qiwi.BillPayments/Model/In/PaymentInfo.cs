@@ -1,15 +1,17 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Model.In
 {
+    /// <inheritdoc />
     /// <summary>
     /// Invoice data are put in Pay Form URL. 
     /// </summary>
     [ComVisible(true)]
     [DataContract]
-    public class PaymentInfo
+    public class PaymentInfo : FieldsDictionary
     {
         /// <summary>
         /// The merchant public key.

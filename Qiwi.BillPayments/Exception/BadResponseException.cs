@@ -17,7 +17,7 @@ namespace Qiwi.BillPayments.Exception
         /// The response HTTP status code.
         /// </summary>
         [ComVisible(true)]
-        public readonly HttpStatusCode httpStatus;
+        public readonly HttpStatusCode HttpStatus;
         
         /// <inheritdoc />
         /// <summary>
@@ -27,7 +27,7 @@ namespace Qiwi.BillPayments.Exception
         public BadResponseException(ResponseData responseData)
             : base("Http response code " + responseData.HttpStatus)
         {
-            httpStatus = responseData.HttpStatus;
+            HttpStatus = responseData.HttpStatus;
         }
         
         /// <inheritdoc />
@@ -38,7 +38,7 @@ namespace Qiwi.BillPayments.Exception
         public BadResponseException(HttpStatusCode httpStatus)
             : base("Empty body, HTTP status " + httpStatus)
         {
-            this.httpStatus = httpStatus;
+            HttpStatus = httpStatus;
         }
     }
 }

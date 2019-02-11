@@ -14,9 +14,9 @@ namespace Qiwi.BillPayments.Client
     [ComVisible(true)]
     public class RequestMappingIntercessor
     {
-        private readonly IObjectMapper mapper;
+        private readonly IObjectMapper _mapper;
         
-        private readonly IClient client;
+        private readonly IClient _client;
         
         /// <summary>
         /// The constructor.
@@ -25,8 +25,8 @@ namespace Qiwi.BillPayments.Client
         /// <param name="mapper">The JSON object mapper.</param>
         public RequestMappingIntercessor(IClient client, IObjectMapper mapper)
         {
-            this.client = client;
-            this.mapper = mapper;
+            _client = client;
+            _mapper = mapper;
         }
         
         /// <summary>
@@ -39,23 +39,23 @@ namespace Qiwi.BillPayments.Client
         /// <typeparam name="T">The result type.</typeparam>
         /// <returns>The response HTTP body.</returns>
         [ComVisible(true)]
-        public T request<T>(
+        public T Request<T>(
             string method,
             string url,
             Dictionary<string, string> headers,
             object entityOpt = null
         )
         {
-            var jsonOpt = serializeRequestBody(entityOpt);
-            var response = client.request(method, url, headers, jsonOpt);
-            return deserializeResponseBody<T>(response);
+            var jsonOpt = SerializeRequestBody(entityOpt);
+            var response = _client.Request(method, url, headers, jsonOpt);
+            return DeserializeResponseBody<T>(response);
         }
         
-        private string serializeRequestBody(object entityOpt = null)
+        private string SerializeRequestBody(object entityOpt = null)
         {
             try
             {
-                return null != entityOpt ? mapper.writeValue(entityOpt) : null;
+                return null != entityOpt ? _mapper.WriteValue(entityOpt) : null;
             }
             catch (System.Exception exception)
             {
@@ -63,26 +63,26 @@ namespace Qiwi.BillPayments.Client
             }
         }
         
-        private T deserializeResponseBody<T>(ResponseData response)
+        private T DeserializeResponseBody<T>(ResponseData response)
         {
             try
             {
                 if (null == response.Body) {
                     throw new BadResponseException(response.HttpStatus);
                 }
-                return mapper.readValue<T>(response.Body);
+                return _mapper.ReadValue<T>(response.Body);
             }
             catch (System.Exception)
             {
-                throw mapToError(response);
+                throw MapToError(response);
             }
         }
         
-        private BillPaymentsServiceException mapToError(ResponseData response)
+        private BillPaymentsServiceException MapToError(ResponseData response)
         {
             try
             {
-                var errorResponse = mapper.readValue<ErrorResponse>(response.Body);
+                var errorResponse = _mapper.ReadValue<ErrorResponse>(response.Body);
                 return new BillPaymentsServiceException(errorResponse, response.HttpStatus);
             }
             catch (System.Exception)

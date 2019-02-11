@@ -14,7 +14,7 @@ namespace Qiwi.BillPayments.Json
         /// <param name="entityOpt">The object.</param>
         /// <returns>The JSON.</returns>
         [ComVisible(true)]
-        string writeValue(object entityOpt);
+        string WriteValue(object entityOpt);
         
         /// <summary>
         /// JSON to object.
@@ -23,6 +23,6 @@ namespace Qiwi.BillPayments.Json
         /// <typeparam name="T">The object type.</typeparam>
         /// <returns>The object.</returns>
         [ComVisible(true)]
-        T readValue<T>(string body);
+        T ReadValue<T>(string body);
     }
 }

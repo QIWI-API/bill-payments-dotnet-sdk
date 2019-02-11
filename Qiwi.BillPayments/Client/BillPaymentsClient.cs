@@ -23,15 +23,15 @@ namespace Qiwi.BillPayments.Client
         public const string BillsUrl = "https://api.qiwi.com/partner/bill/v1/bills/";
         
         /// <summary>
-        /// The API datetime format.
+        /// The API dateTime format.
         /// </summary>
-        public const string DatetimeFormat = "yyyy-MM-ddTHH\\:mm\\:ss.fffzzz";
+        public const string DateTimeFormat = "yyyy-MM-ddTHH\\:mm\\:sszzz";
         
-        private readonly RequestMappingIntercessor requestMappingIntercessor;
+        private readonly RequestMappingIntercessor _requestMappingIntercessor;
         
-        private readonly Dictionary<string, string> headers;
+        private readonly Dictionary<string, string> _headers;
         
-        private readonly IFingerprint fingerprint;
+        private readonly IFingerprint _fingerprint;
         
         /// <summary>
         /// The constructor.
@@ -45,14 +45,14 @@ namespace Qiwi.BillPayments.Client
             IFingerprint fingerprint
         )
         {
-            headers = new Dictionary<string, string>
+            _headers = new Dictionary<string, string>
             {
                 {"Content-Type", "application/json"},
                 {"Accept", "application/json"},
                 {"Authorization", "Bearer " + secretKey}
             };
-            this.requestMappingIntercessor = requestMappingIntercessor;
-            this.fingerprint = fingerprint;
+            _requestMappingIntercessor = requestMappingIntercessor;
+            _fingerprint = fingerprint;
         }
         
         /// <summary>
@@ -62,9 +62,9 @@ namespace Qiwi.BillPayments.Client
         /// <param name="successUrl">The success URL.</param>
         /// <returns>New invoice witch updated payment URL.</returns>
         [ComVisible(true)]
-        public static BillResponse appendSuccessUrl(BillResponse response, Uri successUrl)
+        public static BillResponse AppendSuccessUrl(BillResponse response, Uri successUrl)
         {
-            return appendSuccessUrl<BillResponse>(response, successUrl);
+            return AppendSuccessUrl<BillResponse>(response, successUrl);
         }
         
         /// <summary>
@@ -75,13 +75,13 @@ namespace Qiwi.BillPayments.Client
         /// <typeparam name="T">The result invoice type.</typeparam>
         /// <returns>New invoice witch updated payment URL.</returns>
         [ComVisible(true)]
-        public static T appendSuccessUrl<T>(BillResponse response, Uri successUrl) where T : BillResponse
+        public static T AppendSuccessUrl<T>(BillResponse response, Uri successUrl) where T : BillResponse
         {
             var uriBuilder = new UriBuilder(response.PayUrl);
             var parameters = HttpUtility.ParseQueryString(uriBuilder.Query);
             parameters["successUrl"] = successUrl.ToString();
             uriBuilder.Query = parameters.ToString();
-            return response.withPayUrl<T>(uriBuilder.Uri);
+            return response.WithPayUrl<T>(uriBuilder.Uri);
         }
         
         /// <summary>
@@ -89,9 +89,9 @@ namespace Qiwi.BillPayments.Client
         /// </summary>
         /// <returns>The fingerprint.</returns>
         [ComVisible(true)]
-        public IFingerprint getFingerprint()
+        public IFingerprint GetFingerprint()
         {
-            return fingerprint;
+            return _fingerprint;
         }
         
         /// <summary>
@@ -99,18 +99,30 @@ namespace Qiwi.BillPayments.Client
         /// https://developer.qiwi.com/en/bill-payments/#http
         /// </summary>
         /// <param name="paymentInfo">The invoice data.</param>
+        /// <param name="customFields">The additional info.</param>
         /// <returns>The pay form URL.</returns>
         /// <exception cref="UrlEncodingException"></exception>
         [ComVisible(true)]
-        public Uri createPaymentForm(PaymentInfo paymentInfo)
+        public Uri CreatePaymentForm(
+            PaymentInfo paymentInfo,
+            [Optional] CustomFields customFields
+        )
         {
+            var additional = customFields ?? new CustomFields();
+            additional.ApiClient = _fingerprint.GetClientName();
+            additional.ApiClientVersion = _fingerprint.GetClientVersion();
+            var uriBuilder = new UriBuilder("https://oplata.qiwi.com/create");
             try
             {
-                var uriBuilder = new UriBuilder("https://oplata.qiwi.com/create");
                 var parameters = HttpUtility.ParseQueryString(uriBuilder.Query);
                 parameters["amount"] = paymentInfo.Amount.ValueString;
-                parameters["customFields[apiClient]"] = fingerprint.getClientName();
-                parameters["customFields[apiClientVersion]"] = fingerprint.getClientVersion();
+                foreach (var keyValuePair in additional.ToDictionary())
+                {
+                    if (null != keyValuePair.Value)
+                    {
+                        parameters["customFields[" + keyValuePair.Key + "]"] = keyValuePair.Value.ToString();
+                    }
+                }
                 parameters["publicKey"] = paymentInfo.PublicKey;
                 parameters["billId"] = paymentInfo.BillId;
                 parameters["successUrl"] = paymentInfo.SuccessUrl.ToString();
@@ -128,11 +140,15 @@ namespace Qiwi.BillPayments.Client
         /// https://developer.qiwi.com/en/bill-payments/#create
         /// </summary>
         /// <param name="info">The invoice data.</param>
+        /// <param name="customFields">The additional fields.</param>
         /// <returns>The invoice.</returns>
         [ComVisible(true)]
-        public BillResponse createBill(CreateBillInfo info)
+        public BillResponse CreateBill(
+            CreateBillInfo info,
+            [Optional] CustomFields customFields
+        )
         {
-            return createBill<BillResponse>(info);
+            return CreateBill<BillResponse>(info, customFields);
         }
         
         /// <summary>
@@ -140,29 +156,25 @@ namespace Qiwi.BillPayments.Client
         /// https://developer.qiwi.com/en/bill-payments/#create
         /// </summary>
         /// <param name="info">The invoice data.</param>
+        /// <param name="customFields">The additional info.</param>
         /// <typeparam name="T">The result invoice type.</typeparam>
         /// <returns>The invoice.</returns>
         [ComVisible(true)]
-        public T createBill<T>(CreateBillInfo info) where T : BillResponse
+        public T CreateBill<T>(
+            CreateBillInfo info,
+            [Optional] CustomFields customFields
+        ) where T : BillResponse
         {
-            var response = requestMappingIntercessor.request<T>(
+            var additional = customFields ?? new CustomFields();
+            additional.ApiClient = _fingerprint.GetClientName();
+            additional.ApiClientVersion = _fingerprint.GetClientVersion();
+            var response = _requestMappingIntercessor.Request<T>(
                 "PUT",
                 BillsUrl + info.BillId,
-                headers,
-                new CreateBillRequest
-                {
-                    Amount = info.Amount,
-                    Comment = info.Comment,
-                    ExpirationDateTime = info.ExpirationDateTime,
-                    Customer = info.Customer,
-                    CustomFields = new CustomFields
-                    {
-                        ApiClient = fingerprint.getClientName(),
-                        ApiClientVersion = fingerprint.getClientVersion()
-                    }
-                }
+                _headers,
+                info.GetCreateBillRequest(additional)
             );
-            return appendSuccessUrl<T>(response, info.SuccessUrl);
+            return AppendSuccessUrl<T>(response, info.SuccessUrl);
         }
         
         /// <summary>
@@ -172,9 +184,9 @@ namespace Qiwi.BillPayments.Client
         /// <param name="billId">The invoice identifier.</param>
         /// <returns>The invoice.</returns>
         [ComVisible(true)]
-        public BillResponse getBillInfo(string billId)
+        public BillResponse GetBillInfo(string billId)
         {
-            return getBillInfo<BillResponse>(billId);
+            return GetBillInfo<BillResponse>(billId);
         }
         
         /// <summary>
@@ -185,12 +197,12 @@ namespace Qiwi.BillPayments.Client
         /// <typeparam name="T">The result invoice type.</typeparam>
         /// <returns>The invoice.</returns>
         [ComVisible(true)]
-        public T getBillInfo<T>(string billId) where T : BillResponse
+        public T GetBillInfo<T>(string billId) where T : BillResponse
         {
-            return requestMappingIntercessor.request<T>(
+            return _requestMappingIntercessor.Request<T>(
                 "GET",
                 BillsUrl + billId,
-                headers
+                _headers
             );
         }
         
@@ -201,9 +213,9 @@ namespace Qiwi.BillPayments.Client
         /// <param name="billId">The invoice identifier.</param>
         /// <returns>The invoice.</returns>
         [ComVisible(true)]
-        public BillResponse cancelBill(string billId)
+        public BillResponse CancelBill(string billId)
         {
-            return cancelBill<BillResponse>(billId);
+            return CancelBill<BillResponse>(billId);
         }
         
         /// <summary>
@@ -214,12 +226,12 @@ namespace Qiwi.BillPayments.Client
         /// <typeparam name="T">The result invoice type.</typeparam>
         /// <returns>The invoice.</returns>
         [ComVisible(true)]
-        public T cancelBill<T>(string billId) where T : BillResponse
+        public T CancelBill<T>(string billId) where T : BillResponse
         {
-            return requestMappingIntercessor.request<T>(
+            return _requestMappingIntercessor.Request<T>(
                 "POST",
                 BillsUrl + billId + "/reject",
-                headers
+                _headers
             );
         }
         
@@ -232,9 +244,9 @@ namespace Qiwi.BillPayments.Client
         /// <param name="amount">The refund amount.</param>
         /// <returns>The refund.</returns>
         [ComVisible(true)]
-        public RefundResponse refundBill(string billId, string refundId, MoneyAmount amount)
+        public RefundResponse RefundBill(string billId, string refundId, MoneyAmount amount)
         {
-            return refundBill<RefundResponse>(billId, refundId, amount);
+            return RefundBill<RefundResponse>(billId, refundId, amount);
         }
         
         /// <summary>
@@ -247,12 +259,12 @@ namespace Qiwi.BillPayments.Client
         /// <typeparam name="T">The result refund type.</typeparam>
         /// <returns>The refund.</returns>
         [ComVisible(true)]
-        public T refundBill<T>(string billId, string refundId, MoneyAmount amount) where T : RefundResponse
+        public T RefundBill<T>(string billId, string refundId, MoneyAmount amount) where T : RefundResponse
         {
-            return requestMappingIntercessor.request<T>(
+            return _requestMappingIntercessor.Request<T>(
                 "PUT",
                 BillsUrl + billId + "/refunds/" + refundId,
-                headers,
+                _headers,
                 new RefundBillRequest
                 {
                     Amount = amount
@@ -268,9 +280,9 @@ namespace Qiwi.BillPayments.Client
         /// <param name="refundId">The refund identifier.</param>
         /// <returns>The refund.</returns>
         [ComVisible(true)]
-        public RefundResponse getRefundInfo(string billId, string refundId)
+        public RefundResponse GetRefundInfo(string billId, string refundId)
         {
-            return getRefundInfo<RefundResponse>(billId, refundId);
+            return GetRefundInfo<RefundResponse>(billId, refundId);
         }
         
         /// <summary>
@@ -282,12 +294,12 @@ namespace Qiwi.BillPayments.Client
         /// <typeparam name="T">The result refund type.</typeparam>
         /// <returns>The refund.</returns>
         [ComVisible(true)]
-        public T getRefundInfo<T>(string billId, string refundId) where T : RefundResponse
+        public T GetRefundInfo<T>(string billId, string refundId) where T : RefundResponse
         {
-            return requestMappingIntercessor.request<T>(
+            return _requestMappingIntercessor.Request<T>(
                 "GET",
                 BillsUrl + billId + "/refunds/" + refundId,
-                headers
+                _headers
             );
         }
     }

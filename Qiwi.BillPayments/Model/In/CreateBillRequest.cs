@@ -1,15 +1,17 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Model.In
 {
+    /// <inheritdoc />
     /// <summary>
     /// Create issue request.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
-    public class CreateBillRequest
+    public class CreateBillRequest : FieldsDictionary
     {
         /// <summary>
         /// The invoice amount witch currency.

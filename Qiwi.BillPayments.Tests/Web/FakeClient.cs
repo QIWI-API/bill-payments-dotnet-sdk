@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Qiwi.BillPayments.Json;
 using Qiwi.BillPayments.Model;
 using Qiwi.BillPayments.Web;
@@ -12,16 +11,16 @@ namespace Qiwi.BillPayments.Tests.Web
 
         public IObjectMapper ObjectMapper { get; }
 
-        public int RequestCounter { get; set; }
+        public int RequestCounter { private get; set; }
         
-        public ResponseData DefaultResponseData { get; set; } = new ResponseData();
+        public ResponseData DefaultResponseData { private get; set; } = new ResponseData();
         
         public FakeClient(IObjectMapper objectMapper)
         {
             ObjectMapper = objectMapper;
         }
         
-        public ResponseData request(
+        public ResponseData Request(
             string method,
             string url,
             IReadOnlyDictionary<string, string> headers,

@@ -1,15 +1,17 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Model.In
 {
+    /// <inheritdoc />
     /// <summary>
     /// Create issue info.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
-    public class CreateBillInfo
+    public class CreateBillInfo : FieldsDictionary
     {
         /// <summary>
         /// The unique invoice identifier in merchant's system.
@@ -85,7 +87,7 @@ namespace Qiwi.BillPayments.Model.In
         /// <param name="customFields">The invoice additional data.</param>
         /// <returns>The create invoice request.</returns>
         [ComVisible(true)]
-        public CreateBillRequest getCreateBillRequest(CustomFields customFields)
+        public CreateBillRequest GetCreateBillRequest(CustomFields customFields)
         {
             return new CreateBillRequest
             {

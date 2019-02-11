@@ -19,11 +19,11 @@ namespace Qiwi.BillPayments.Web
         /// <param name="entityOpt">The request body.</param>
         /// <returns>The response data.</returns>
         [ComVisible(true)]
-        ResponseData request(
+        ResponseData Request(
             string method,
             string url,
             IReadOnlyDictionary<string, string> headers,
-            string entityOpt = null
+            [Optional] string entityOpt
         );
     }
 }

@@ -1,15 +1,17 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Model.Out
 {
+    /// <inheritdoc />
     /// <summary>
     /// The error response.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
-    public class ErrorResponse
+    public class ErrorResponse : FieldsDictionary
     {
         /// <summary>
         /// The service name.
@@ -56,11 +58,11 @@ namespace Qiwi.BillPayments.Model.Out
         }
         
         /// <summary>
-        /// The datetime.
+        /// The dateTime.
         /// </summary>
         [ComVisible(true)]
-        [DataMember(Name = "datetime")]
-        public DateTime Datetime
+        [DataMember(Name = "dateTime")]
+        public DateTime DateTime
         {
             get;
             set;

@@ -16,7 +16,7 @@ namespace Qiwi.BillPayments.Json
     [ComVisible(true)]
     public class ContractObjectMapper : IObjectMapper
     {
-        private readonly DataContractJsonSerializerSettings settings;
+        private readonly DataContractJsonSerializerSettings _settings;
         
         /// <inheritdoc/>
         /// <summary>
@@ -25,7 +25,7 @@ namespace Qiwi.BillPayments.Json
         public ContractObjectMapper() : this(
             new DataContractJsonSerializerSettings
             {
-                DateTimeFormat = new DateTimeFormat(BillPaymentsClient.DatetimeFormat, CultureInfo.InvariantCulture)
+                DateTimeFormat = new DateTimeFormat(BillPaymentsClient.DateTimeFormat, CultureInfo.InvariantCulture)
             }
         )
         {
@@ -37,14 +37,14 @@ namespace Qiwi.BillPayments.Json
         /// <param name="settings">The serializer settings.</param>
         public ContractObjectMapper(DataContractJsonSerializerSettings settings)
         {
-            this.settings = settings;
+            _settings = settings;
         }
         
         /// <inheritdoc />
         [ComVisible(true)]
-        public string writeValue(object entityOpt)
+        public string WriteValue(object entityOpt)
         {
-            var serializer = new DataContractJsonSerializer(entityOpt.GetType(), settings);
+            var serializer = new DataContractJsonSerializer(entityOpt.GetType(), _settings);
             var stream = new MemoryStream();
             serializer.WriteObject(stream, entityOpt);
             var json = Encoding.UTF8.GetString(stream.ToArray());
@@ -54,9 +54,9 @@ namespace Qiwi.BillPayments.Json
         
         /// <inheritdoc />
         [ComVisible(true)]
-        public T readValue<T>(string body)
+        public T ReadValue<T>(string body)
         {
-            var serializer = new DataContractJsonSerializer(typeof(T), settings);
+            var serializer = new DataContractJsonSerializer(typeof(T), _settings);
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(body));
             var rootObject = serializer.ReadObject(stream);
             stream.Close();

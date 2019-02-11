@@ -11,7 +11,7 @@ namespace Qiwi.BillPayments.Web
     [ComVisible(true)]
     public class NetFingerprint : IFingerprint
     {
-        private readonly string clientVersion;
+        private readonly string _clientVersion;
         
         /// <inheritdoc />
         /// <summary>
@@ -27,21 +27,21 @@ namespace Qiwi.BillPayments.Web
         /// <param name="assembly">Client assembly.</param>
         public NetFingerprint(Assembly assembly)
         {
-            clientVersion = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
+            _clientVersion = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
         }
         
         /// <inheritdoc />
         [ComVisible(true)]
-        public string getClientName()
+        public string GetClientName()
         {
             return "dotnet_sdk";
         }
         
         /// <inheritdoc />
         [ComVisible(true)]
-        public string getClientVersion()
+        public string GetClientVersion()
         {
-            return clientVersion;
+            return _clientVersion;
         }
     }
 }

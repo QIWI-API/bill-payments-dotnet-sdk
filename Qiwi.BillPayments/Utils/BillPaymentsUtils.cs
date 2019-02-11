@@ -22,7 +22,7 @@ namespace Qiwi.BillPayments.Utils
         /// <param name="value">The amount value.</param>
         /// <returns>The evened amount value.</returns>
         [ComVisible(true)]
-        public static decimal evenValue(decimal value)
+        public static decimal EvenValue(decimal value)
         {
             return decimal.Round(value, 2, MidpointRounding.ToEven);
         }
@@ -33,9 +33,9 @@ namespace Qiwi.BillPayments.Utils
         /// <param name="value">The amount value.</param>
         /// <returns>The evened amount value.</returns>
         [ComVisible(true)]
-        public static decimal evenValue(string value)
+        public static decimal EvenValue(string value)
         {
-            return evenValue(Convert.ToDecimal(value, CultureInfo.InvariantCulture));
+            return EvenValue(Convert.ToDecimal(value, CultureInfo.InvariantCulture));
         }
         
         /// <summary>
@@ -44,9 +44,9 @@ namespace Qiwi.BillPayments.Utils
         /// <param name="value">The amount value.</param>
         /// <returns>The formatted amount value.</returns>
         [ComVisible(true)]
-        public static string formatValue(decimal value)
+        public static string FormatValue(decimal value)
         {
-            return evenValue(value).ToString("0.00", CultureInfo.InvariantCulture);
+            return EvenValue(value).ToString("0.00", CultureInfo.InvariantCulture);
         }
         
         /// <summary>
@@ -55,42 +55,42 @@ namespace Qiwi.BillPayments.Utils
         /// <param name="value">The amount value.</param>
         /// <returns>The formatted amount value.</returns>
         [ComVisible(true)]
-        public static string formatValue(string value)
+        public static string FormatValue(string value)
         {
-            return evenValue(value).ToString("0.00", CultureInfo.InvariantCulture);
+            return EvenValue(value).ToString("0.00", CultureInfo.InvariantCulture);
         }
         
         /// <summary>
-        /// Parse API formatted datetime.
+        /// Parse API formatted dateTime.
         /// </summary>
-        /// <param name="datetime">The datetime.</param>
-        /// <returns>The datetime.</returns>
+        /// <param name="dateTime">The dateTime.</param>
+        /// <returns>The dateTime.</returns>
         [ComVisible(true)]
-        public static DateTime parseDate(string datetime)
+        public static DateTime ParseDate(string dateTime)
         {
-            return DateTime.ParseExact(datetime, BillPaymentsClient.DatetimeFormat, CultureInfo.InvariantCulture);
+            return DateTime.ParseExact(dateTime, BillPaymentsClient.DateTimeFormat, CultureInfo.InvariantCulture);
         }
         
         /// <summary>
-        /// Format datetime to API.
+        /// Format dateTime to API.
         /// </summary>
-        /// <param name="datetime">The datetime.</param>
-        /// <returns>The datetime.</returns>
+        /// <param name="dateTime">The dateTime.</param>
+        /// <returns>The dateTime.</returns>
         [ComVisible(true)]
-        public static string formatDate(DateTime datetime)
+        public static string FormatDate(DateTime dateTime)
         {
-            return datetime.ToString(BillPaymentsClient.DatetimeFormat);
+            return dateTime.ToString(BillPaymentsClient.DateTimeFormat);
         }
         
         /// <summary>
-        /// Make timeout datetime in days from now.
+        /// Make timeout dateTime in days from now.
         /// </summary>
         /// <param name="days">The days count.</param>
-        /// <returns>Format datetime to API.</returns>
+        /// <returns>Format dateTime to API.</returns>
         [ComVisible(true)]
-        public static DateTime getTimeoutDate(double? days = null)
+        public static DateTime GetTimeoutDate(double? days = null)
         {
-            return parseDate(formatDate(DateTime.Now.AddDays(days ?? 45)));
+            return ParseDate(FormatDate(DateTime.Now.AddDays(days ?? 45)));
         }
         
         /// <summary>
@@ -102,17 +102,17 @@ namespace Qiwi.BillPayments.Utils
         /// <param name="merchantSecret">The merchant secret key.</param>
         /// <returns>Check result.</returns>
         [ComVisible(true)]
-        public static bool checkNotificationSignature(
+        public static bool CheckNotificationSignature(
             string signature,
             Notification notification,
             string merchantSecret
         )
         {
-            var hash = encrypt(merchantSecret, joinFields(notification)).ToLower();
+            var hash = Encrypt(merchantSecret, JoinFields(notification)).ToLower();
             return hash == signature;
         }
         
-        private static string joinFields(Notification notification) {
+        private static string JoinFields(Notification notification) {
             var fields = new SortedDictionary<string, string>
             {
                 {"amount.currency", notification?.Bill?.Amount?.CurrencyString ?? ""},
@@ -124,7 +124,7 @@ namespace Qiwi.BillPayments.Utils
             return string.Join("|", fields.Values);
         }
         
-        private static string encrypt(string key, string data) {
+        private static string Encrypt(string key, string data) {
             try
             {
                 var encoding = Encoding.GetEncoding("utf-8");

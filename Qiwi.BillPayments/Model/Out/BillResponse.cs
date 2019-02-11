@@ -2,15 +2,17 @@ using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Qiwi.BillPayments.Model.In;
+using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Model.Out
 {
+    /// <inheritdoc />
     /// <summary>
     /// The invoice response.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
-    public class BillResponse
+    public class BillResponse : FieldsDictionary
     {
         /// <summary>
         /// The merchant’s site identifier in API.
@@ -79,7 +81,7 @@ namespace Qiwi.BillPayments.Model.Out
         }
         
         /// <summary>
-        /// The datetime of the invoice creation.
+        /// The dateTime of the invoice creation.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "creationDateTime")]
@@ -129,7 +131,7 @@ namespace Qiwi.BillPayments.Model.Out
         /// <typeparam name="T">The new invoice response type.</typeparam>
         /// <returns>The new invoice response.</returns>
         [ComVisible(true)]
-        public T withPayUrl<T>(Uri payUrl) where T : BillResponse
+        public T WithPayUrl<T>(Uri payUrl) where T : BillResponse
         {
             var billResponse = (T) Activator.CreateInstance(typeof(T));
             billResponse.SiteId = SiteId;

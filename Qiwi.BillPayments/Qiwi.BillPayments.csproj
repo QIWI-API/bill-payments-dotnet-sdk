@@ -6,7 +6,7 @@
         <AssemblyName>Qiwi.BillPayments</AssemblyName>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <PackageVersion>0.0.1</PackageVersion>
+        <PackageVersion>0.1.0</PackageVersion>
         <Company>QIWI JSC</Company>
         <Authors>Yaraslav &lt;yaroslav@wannabe.pro&gt;</Authors>
         <Product>Universal payments API SDK</Product>
@@ -19,9 +19,9 @@
         <PackageTags>qiwi sdk</PackageTags>
         <PackageId>Qiwi.BillPayments</PackageId>
         <PackageIconUrl>https://avatars1.githubusercontent.com/u/29546240?s=140</PackageIconUrl>
-        <ProductVersion>0.0.1</ProductVersion>
-        <FileVersion>0.0.1</FileVersion>
-        <AssemblyVersion>0.0.1</AssemblyVersion>
+        <ProductVersion>0.1.0</ProductVersion>
+        <FileVersion>0.1.0</FileVersion>
+        <AssemblyVersion>0.1.0</AssemblyVersion>
         <AssemblyTitle>QIWI SDK</AssemblyTitle>
     </PropertyGroup>
     

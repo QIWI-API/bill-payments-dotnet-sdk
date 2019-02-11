@@ -17,7 +17,7 @@ namespace Qiwi.BillPayments.Utils
         /// <summary>
         /// The enum item value.
         /// </summary>
-        public readonly string value;
+        public readonly string Value;
         
         /// <summary>
         /// The enum item constructor.
@@ -25,7 +25,7 @@ namespace Qiwi.BillPayments.Utils
         /// <param name="value">The enum item value.</param>
         protected StringEnum(string value)
         {
-            this.value = value;
+            Value = value;
         }
         
         /// <summary>
@@ -35,7 +35,7 @@ namespace Qiwi.BillPayments.Utils
         [ComVisible(true)]
         public override string ToString()
         {
-            return value;
+            return Value;
         }
         
         /// <summary>
@@ -45,8 +45,8 @@ namespace Qiwi.BillPayments.Utils
         [ComVisible(true)]
         public static List<T> AsList()
         {
-            return typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Static)
-                .Where(p => p.PropertyType == typeof(T))
+            return typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Static | BindingFlags.GetField)
+                .Where(p => p.CanRead && p.PropertyType == typeof(T))
                 .Select(p => (T) p.GetValue(null))
                 .ToList();
         }
@@ -60,7 +60,7 @@ namespace Qiwi.BillPayments.Utils
         public static T Parse(string value)
         {
             var all = AsList();
-            return all.All(a => a.value != value) ? null : all.Single(a => a.value == value);
+            return all.All(a => a.Value != value) ? null : all.Single(a => a.Value == value);
         }
         
         /// <inheritdoc />
@@ -73,7 +73,7 @@ namespace Qiwi.BillPayments.Utils
         public bool Equals(T other)
         {
             if (other == null) return false;
-            return value == other.value;
+            return Value == other.Value;
         }
         
         /// <summary>
@@ -102,7 +102,7 @@ namespace Qiwi.BillPayments.Utils
         [ComVisible(true)]
         public override int GetHashCode()
         {
-            return value.GetHashCode();
+            return Value.GetHashCode();
         }
         
         /// <summary>

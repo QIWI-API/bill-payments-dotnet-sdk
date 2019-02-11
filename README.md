@@ -23,205 +23,245 @@ nuget install Qiwi.BillPayments
 Для использования SDK требуется `secretKey`, подробности в [документации](https://developer.qiwi.com/ru/bill-payments/#auth).
 
 ```c#
-var secretKey = "eyJ2ZXJzaW9uIjoicmVzdF92MyIsImRhdGEiOnsibWVyY2hhbnRfaWQiOjUyNjgxMiwiYXBpX3VzZXJfaWQiOjcxNjI2MTk3LCJzZWNyZXQiOiJmZjBiZmJiM2UxYzc0MjY3YjIyZDIzOGYzMDBkNDhlYjhiNTnONPININONPN090MTg5Z**********************";
-
-var client = BillPaymentClientFactory.createDefault(secretKey);
+var client = BillPaymentClientFactory.Create(
+    secretKey: "eyJ2ZXJzaW9uIjoicmVzdF92MyIsImRhdGEiOnsibWVyY2hhbnRfaWQiOjUyNjgxMiwiYXBpX3VzZXJfaWQiOjcxNjI2MTk3LCJzZWNyZXQiOiJmZjBiZmJiM2UxYzc0MjY3YjIyZDIzOGYzMDBkNDhlYjhiNTnONPININONPN090MTg5Z**********************"
+);
 ```
 
 ## Примеры
 
-По-умолчанию пользователю доступно несколько способов оплаты. В платежной форме параметры счета передаются в открытом виде в ссылке. Далее клиенту отображается форма с выбором способа оплаты. При использовании этого способа нельзя гарантировать, что все счета выставлены мерчантом, в отличие от выставления по API.
+По-умолчанию пользователю доступно несколько способов оплаты.
+В платежной форме параметры счета передаются в открытом виде в ссылке.
+Далее клиенту отображается форма с выбором способа оплаты.
+При использовании этого способа нельзя гарантировать, что все счета выставлены мерчантом, в отличие от выставления по API.
 Через API все параметры передаются в закрытом виде, так же в API поддерживаются операции выставления и отмены счетов, возврата средств по оплаченным счетам, а также проверки статуса выполнения операций.
 
 
 ### Платежная форма
 
-Простой способ для интеграции. При открытии формы клиенту автоматически выставляется счет. Параметры счета передаются в открытом виде в ссылке. Далее клиенту отображается платежная форма с выбором способа оплаты. При использовании этого способа нельзя гарантировать, что все счета выставлены мерчантом, в отличие от выставления по API.
+Простой способ для интеграции.
+При открытии формы клиенту автоматически выставляется счет.
+Параметры счета передаются в открытом виде в ссылке.
+Далее клиенту отображается платежная форма с выбором способа оплаты.
+При использовании этого способа нельзя гарантировать, что все счета выставлены мерчантом, в отличие от выставления по API.
 
-Метод `createPaymentForm` создает платежную форму. В параметрах нужно указать:
+Метод `CreatePaymentForm` создает платежную форму. В параметрах нужно указать:
+
 * ключ идентификации провайдера, полученный в QIWI Кассе, `publicKey`;
 * идентификатор счета `billId` внутри вашей системы;
 * сумму `amount`;
-* адрес перехода после успешной оплаты `successUrl`.
+* адрес перехода после успешной оплаты `successUrl`;
+* персонализация платежной формы `themeCode`.
 
 В результате будет получена ссылка на форму оплаты, которую можно передать клиенту.
 Подробнее о доступных параметрах в [документации](https://developer.qiwi.com/ru/bill-payments/#http).
 
 ```c#
-var publicKey = "2tbp1WQvsgQeziGY9vTLe9vDZNg7tmCymb4Lh6STQokqKrpCC6qrUUKEDZAJ7mvFnzr1yTebUiQaBLDnebLMMxL8nc6FF5zfmGQnypdXCbQJqHEJW5RJmKfj8nvgc";
-
-var amount = new MoneyAmount
-{
-    ValueDecimal = 499.9m,
-    CurrencyEnum = CurrencyEnum.Rub
-};
-var billId = Guid.NewGuid().ToString();
-var successUrl = "https://merchant.com/payment/success?billId=893794793973";
-
-var paymentUrl = client.createPaymentForm(new PaymentInfo(key, amount, billId, successUrl));
+client.CreatePaymentForm(
+    new PaymentInfo
+    {
+        PublicKey = "2tbp1WQvsgQeziGY9vTLe9vDZNg7tmCymb4Lh6STQokqKrpCC6qrUUKEDZAJ7mvFnzr1yTebUiQaBLDnebLMMxL8nc6FF5zfmGQnypdXCbQJqHEJW5RJmKfj8nvgc",
+        Amount = new MoneyAmount
+        {
+            ValueDecimal = 499.9m,
+            CurrencyEnum = CurrencyEnum.Rub
+        },
+        BillId = Guid.NewGuid().ToString(),
+        SuccessUrl = "https://merchant.com/payment/success?billId=893794793973"
+    },
+    new CustomFields
+    {
+        ThemeCode = "кодСтиля"
+    }
+);
 ```
 
 В результате:
 
-```
-https://oplata.qiwi.com/create?amount=499.90&customFields%5BapiClient%5D=java_sdk&customFields%5BapiClientVersion%5D=1.0.0&publicKey=2tbp1WQvsgQeziGY9vTLe9vDZNg7tmCymb4Lh6STQokqKrpCC6qrUUKEDZAJ11HeiD1GQX8jTnjMxLpMcSZuGZP7xbocwJicsoBAG1HyiPDJ8A8ecBKCKWu6FP5oa&billId=920dc584-ed30-4683-8251-486426768160&successUrl=https%3A%2F%2Fmerchant.com%2Fpayment%2Fsuccess%3FbillId%3D893794793973
+```c#
+new Uri(
+    "https://oplata.qiwi.com/create?amount=499.90&customFields%5BapiClient%5D=dotnet_sdk&customFields%5BapiClientVersion%5D=0.1.0&customFields%5BthemeCode%5D=%D0%BA%D0%BE%D0%B4%D0%A1%D1%82%D0%B8%D0%BB%D1%8F&publicKey=2tbp1WQvsgQeziGY9vTLe9vDZNg7tmCymb4Lh6STQokqKrpCC6qrUUKEDZAJ11HeiD1GQX8jTnjMxLpMcSZuGZP7xbocwJicsoBAG1HyiPDJ8A8ecBKCKWu6FP5oa&billId=920dc584-ed30-4683-8251-486426768160&successUrl=https%3A%2F%2Fmerchant.com%2Fpayment%2Fsuccess%3FbillId%3D893794793973"
+)
 ```
 
 ### Выставление счета
 
-Надежный способ для интеграции. Параметры передаются server2server с использованием авторизации. Метод позволяет выставить счет, при успешном выполнении запроса в ответе вернется параметр `payUrl` - ссылка для редиректа пользователя на платежную форму.
+Надежный способ для интеграции.
+Параметры передаются server2server с использованием авторизации.
+Метод позволяет выставить счет, при успешном выполнении запроса в ответе вернется параметр `payUrl` - ссылка для редиректа пользователя на платежную форму.
 
-Метод `createBill` выставляет новый счет. В параметрах нужно указать:
+Метод `CreateBill` выставляет новый счет.
+В параметрах нужно указать:
+
 * идентификатор счета `billId` внутри вашей системы;
 * сумма счета `amount`;
 * комментарий `comment`;
-* срок оплаты счета `expirationDateTime` (тип `ZonedDateTime`);
+* срок оплаты счета `expirationDateTime`;
 * информация о пользователе `customer`;
-* адрес перехода после успешной оплаты `successUrl`.
+* адрес перехода после успешной оплаты `successUrl`;
+* персонализация платежной формы `themeCode`.
 
 В результате будет получен ответ с данными о выставленном счете.
 Подробнее о доступных параметрах в [документации](https://developer.qiwi.com/ru/bill-payments/#create).
 
 ```c#
-var billInfo = new CreateBillInfo
-{
-    BillId = Guid.NewGuid().ToString(),
-    Amount = new MoneyAmount
+var response = client.CreateBill(
+    new CreateBillInfo
     {
-        ValueDecimal = 199.9m,
-        CurrencyEnum = CurrencyEnum.Rub
+        BillId = Guid.NewGuid().ToString(),
+        Amount = new MoneyAmount
+        {
+            ValueDecimal = 199.9m,
+            CurrencyEnum = CurrencyEnum.Rub
+        },
+        Comment = "comment",
+        ExpirationDateTime = DateTime.Now.AddDays(45),
+        Customer = new Customer
+        {
+            Email = "example@mail.org",
+            Account = Guid.NewGuid().ToString(),
+            Phone = "79123456789"
+        },
+        SuccessUrl = new Uri("http://merchant.ru/success")
     },
-    Comment = "comment",
-    ExpirationDateTime = DateTime.Now.AddDays(45),
-    Customer = new Customer
+    new CustomFields
     {
-        Email = "example@mail.org",
-        Account = Guid.NewGuid().ToString(),
-        Phone = "79123456789"
-    },
-    SuccessUrl = new Uri("http://merchant.ru/success")
-};
-var response = client.createBill(billInfo);
+        ThemeCode = "кодСтиля"
+    }
+);
 ```
 
 Ответ:
 
-```json
+```c#
+new BillResponse
 {
-    "siteId": "270304",
-    "billId": "81150938-dde5-45b8-ba22-df12cc6cee27",
-    "amount": {
-        "value": "199.90",
-        "currency": "RUB"
+    SiteId = "270304",
+    BillId = "81150938-dde5-45b8-ba22-df12cc6cee27",
+    Amount = new MoneyAmount
+    {
+        ValueString = "199.90",
+        CurrencyString = "RUB"
     },
-    "status": {
-        "value": "WAITING",
-        "changedDateTime": "2018-11-03T15:43:51.407Z"
+    Status = new ResponseStatus
+    {
+        ValueString: "WAITING",
+        ChangedDateTime: BillPaymentsUtils.ParseDate("2018-11-03T15:43:51+03:00")
     },
-    "comment": "comment",
-    "customer": {
-        "email": "example@mail.org",
-        "account": "040c3bb8-b207-4ecc-9ff9-90168d3bc34f",
-        "phone": "79123456789"
+    Comment = "comment",
+    Customer = new Customer
+    {
+        Email = "example@mail.org",
+        Account = "040c3bb8-b207-4ecc-9ff9-90168d3bc34f",
+        Phone = "79123456789"
     },
-    "creationDateTime": "2018-11-03T15:43:51.407Z",
-    "expirationDateTime": "2018-12-18T15:43:50.951Z",
-    "payUrl": "https://oplata.qiwi.com/form/?invoice_uid=c77a9051-1467-416b-991e-c25f06c61168&successUrl=http%3A%2F%2Fmerchant.ru%2Fsuccess",
-    "customFields": {
-        "apiClient": "dotnet_sdk",
-        "apiClientVersion": "0.0.1"
+    CreationDateTime = BillPaymentsUtils.ParseDate("2018-11-03T15:43:51+03:00"),
+    ExpirationDateTime = BillPaymentsUtils.ParseDate("2018-12-18T15:43:50+03:00"),
+    PayUrl = new Uri("https://oplata.qiwi.com/form/?invoice_uid=c77a9051-1467-416b-991e-c25f06c61168&successUrl=http%3A%2F%2Fmerchant.ru%2Fsuccess"),
+    CustomFields = new CustomFields
+    {
+        ApiClient = "dotnet_sdk",
+        ApiClientVersion = "0.1.0",
+        ThemeCode = "кодСтиля"
     }
 }
 ```
 
 ### Информация о счете
 
-Метод `getBillInfo` возвращает информацию о счете.
+Метод `GetBillInfo` возвращает информацию о счете.
 В параметрах нужно указать идентификатор счета `billId` внутри вашей системы, в результате будет получен ответ со статусом счета.
 Подробнее в [документации](https://developer.qiwi.com/ru/bill-payments/#invoice-status).
 
 ```c#
-var billId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71";
-
-var response = client.getBillInfo(billId);
+client.GetBillInfo("fcb40a23-6733-4cf3-bacf-8e425fd1fc71");
 ```
 
 Ответ:
 
-```json
+```c#
+new BillResponse
 {
-    "siteId": "270304",
-    "billId": "fcb40a23-6733-4cf3-bacf-8e425fd1fc71",
-    "amount": {
-        "value": "199.90",
-        "currency": "RUB"
+    SiteId = "270304",
+    BillId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71",
+    Amount = new MoneyAmount
+    {
+        ValueString = "199.90",
+        CurrencyString = "RUB"
     },
-    "status": {
-        "value": "WAITING",
-        "changedDateTime": "2018-11-03T16:03:09.062Z"
+    Status = new ResponseStatus
+    {
+        ValueString: "WAITING",
+        ChangedDateTime: BillPaymentsUtils.ParseDate("2018-11-03T16:03:09+03:00")
     },
-    "comment": "test",
-    "customer": {
-        "email": "example@mail.org",
-        "account": "349d5978-bccc-4e10-be7e-3ca0808237b7",
-        "phone": "79123456789"
+    Comment = "test",
+    Customer = new Customer
+    {
+        Email = "example@mail.org",
+        Account = "349d5978-bccc-4e10-be7e-3ca0808237b7",
+        Phone = "79123456789"
     },
-    "creationDateTime": "2018-11-03T16:03:09.062Z",
-    "expirationDateTime": "2018-12-18T16:03:08.668Z",
-    "payUrl": "https://oplata.qiwi.com/form/?invoice_uid=b77618b4-746c-485f-8bb8-fff43ddef114",
-    "customFields": {
-        "apiClient": "dotnet_sdk",
-        "apiClientVersion": "0.0.1"
+    CreationDateTime = BillPaymentsUtils.ParseDate("2018-11-03T16:03:09+03:00"),
+    ExpirationDateTime = BillPaymentsUtils.ParseDate("2018-12-18T16:03:08+03:00"),
+    PayUrl = new Uri("https://oplata.qiwi.com/form/?invoice_uid=b77618b4-746c-485f-8bb8-fff43ddef114"),
+    CustomFields = new CustomFields
+    {
+        ApiClient = "dotnet_sdk",
+        ApiClientVersion = "0.1.0"
     }
 }
 ```
 
 ### Отмена неоплаченного счета
 
-Метод `cancelBill` отменяет неоплаченный счет.
+Метод `CancelBill` отменяет неоплаченный счет.
 В параметрах нужно указать идентификатор счета `billId` внутри вашей системы, в результате будет получен ответ с информацией о счете.
 Подробнее в [документации](https://developer.qiwi.com/ru/bill-payments/#cancel).
 
 ```c#
-var billId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71";
-
-var response = client.cancelBill(billId);
+client.CancelBill("fcb40a23-6733-4cf3-bacf-8e425fd1fc71");
 ```
 
 Ответ:
 
-```json
+```c#
+new BillResponse
 {
-    "siteId": "270304",
-    "billId": "fcb40a23-6733-4cf3-bacf-8e425fd1fc71",
-    "amount": {
-        "value": "199.90",
-        "currency": "RUB"
+    SiteId = "270304",
+    BillId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71",
+    Amount = new MoneyAmount
+    {
+        ValueString = "199.90",
+        CurrencyString = "RUB"
     },
-    "status": {
-        "value": "REJECTED",
-        "changedDateTime": "2018-11-03T16:03:09.062Z"
+    Status = new ResponseStatus
+    {
+        ValueString: "REJECTED",
+        ChangedDateTime: BillPaymentsUtils.ParseDate("2018-11-03T16:03:09+03:00")
     },
-    "comment": "test",
-    "customer": {
-        "email": "example@mail.org",
-        "account": "349d5978-bccc-4e10-be7e-3ca0808237b7",
-        "phone": "79123456789"
+    Comment = "test",
+    Customer = new Customer
+    {
+        Email = "example@mail.org",
+        Account = "349d5978-bccc-4e10-be7e-3ca0808237b7",
+        Phone = "79123456789"
     },
-    "creationDateTime": "2018-11-03T16:03:09.062Z",
-    "expirationDateTime": "2018-12-18T16:03:08.668Z",
-    "payUrl": "https://oplata.qiwi.com/form/?invoice_uid=b77618b4-746c-485f-8bb8-fff43ddef114",
-    "customFields": {
-        "apiClient": "dotnet_sdk",
-        "apiClientVersion": "1.0.0"
+    CreationDateTime = BillPaymentsUtils.ParseDate("2018-11-03T16:03:09+03:00"),
+    ExpirationDateTime = BillPaymentsUtils.ParseDate("2018-12-18T16:03:08+03:00"),
+    PayUrl = new Uri("https://oplata.qiwi.com/form/?invoice_uid=b77618b4-746c-485f-8bb8-fff43ddef114"),
+    CustomFields = new CustomFields
+    {
+        ApiClient = "dotnet_sdk",
+        ApiClientVersion = "0.1.0"
     }
 }
 ```
 
 ### Возврат средств
 
-Метод `refund` производит возврат средств.
+Метод `RefundBill` производит возврат средств.
 В параметрах нужно указать:
+
 * идентификатор счета `billId`;
 * идентификатор возврата `refundId` внутри вашей системы;
 * сумму возврата `amount`.
@@ -229,88 +269,92 @@ var response = client.cancelBill(billId);
 Подробнее в [документации](https://developer.qiwi.com/ru/bill-payments/#refund).
 
 ```c#
-var billId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71";
-var refundId = Guid.NewGuid().ToString();
-var amount = new MoneyAmount
-{
-    ValueDecimal = 104.9m,
-    CurrencyEnum = CurrencyEnum.Rub
-};
-
-var refundResponse = client.refundBill(paidBillId, refundId, amount);
+client.RefundBill(
+    billId: "fcb40a23-6733-4cf3-bacf-8e425fd1fc71",
+    refundId: Guid.NewGuid().ToString(),
+    amount: new MoneyAmount
+    {
+        ValueDecimal = 104.9m,
+        CurrencyEnum = CurrencyEnum.Rub
+    }
+);
 ```
 
 В результате будет получен ответ c информацией о возврате:
 
-```json
+```c#
+new RefundResponse
 {
-    "amount": {
-        "value": "104.90",
-        "currency": "RUB"
+    new MoneyAmount
+    {
+        ValueString = "104.90",
+        CurrencyString = "RUB"
     },
-    "dateTime": "2018-11-03T16:11:57.8Z",
-    "refundId": "3444e8ca-cf68-4dbd-92ee-f68c4bf8f29b",
-    "status": "PARTIAL"
+    DateTime = BillPaymentsUtils.ParseDate("2018-11-03T16:11:57+03:00")
+    RefundId = "3444e8ca-cf68-4dbd-92ee-f68c4bf8f29b",
+    StatusString = "PARTIAL"
 }
 ```
 
 ### Информация о возврате
 
-Метод `getRefundInfo` запрашивает статус возврата, в параметрах нужно указать:
+Метод `GetRefundInfo` запрашивает статус возврата, в параметрах нужно указать:
 * идентификатор счета `billId`;
 * идентификатор возврата `refundId` внутри вашей системы.
 
 Подробнее в [документации](https://developer.qiwi.com/ru/bill-payments/#refund-status).
 
 ```c#
-var billId = "fcb40a23-6733-4cf3-bacf-8e425fd1fc71";
-var refundId = "3444e8ca-cf68-4dbd-92ee-f68c4bf8f29b";
-
-var response = client.getRefundInfo(paidBillId, refundId);
+client.GetRefundInfo(
+    billId: "fcb40a23-6733-4cf3-bacf-8e425fd1fc71",
+    refundId: "3444e8ca-cf68-4dbd-92ee-f68c4bf8f29b"
+);
 ```
 
 В результате будет получен ответ c информацией о возврате:
 
-```json
+```c#
+new RefundResponse
 {
-    "amount": {
-        "value": "104.90",
-        "currency": "RUB"
+    Amount = new MoneyAmount
+    {
+        ValueString = "104.90",
+        CurrencyString = "RUB"
     },
-    "dateTime": "2018-11-03T16:11:57.8Z",
-    "refundId": "3444e8ca-cf68-4dbd-92ee-f68c4bf8f29b",
-    "status": "PARTIAL"
+    DateTime = BillPaymentsUtils.ParseDate("2018-11-03T16:11:57+03:00")
+    RefundId = "3444e8ca-cf68-4dbd-92ee-f68c4bf8f29b",
+    StatusString = "PARTIAL"
 }
-
 ```
 
 ### Вспомогательные методы
 
-Метод `checkNotificationSignature` осуществляет проверку подписи при нотификации о новом счете от сервера уведомлений QIWI. Принимает на вход подпись из входящего запроса, объект - тело запроса и secret ключ, с помощью которого должна осуществляться подпись:
+Метод `CheckNotificationSignature` осуществляет проверку подписи при нотификации о новом счете от сервера уведомлений QIWI.
+Принимает на вход подпись из входящего запроса, объект - тело запроса и secret ключ, с помощью которого должна осуществляться подпись:
 
 ```c#
-var merchantSecret = "test-merchant-secret-for-signature-check";
-var notification = new Notification
-{
-    Bill = new Bill
+Assert.IsTrue(BillPaymentsUtils.CheckNotificationSignature(
+    validSignature: "07e0ebb10916d97760c196034105d010607a6c6b7d72bfa1c3451448ac484a3b",
+    notification: new Notification
     {
-        SiteId = "test",
-        BillId = "test_bill",
-        Amount = new MoneyAmount
+        Bill = new Bill
         {
-            ValueDecimal = 1m,
-            CurrencyEnum = CurrencyEnum.Rub
-        },
-        Status = new BillStatus
-        {
-            ValueEnum = BillStatusEnum.Paid
-        }
-    ),
-    Version = "1"
-};
-var validSignature = "07e0ebb10916d97760c196034105d010607a6c6b7d72bfa1c3451448ac484a3b";
-
-BillPaymentsUtils.checkNotificationSignature(validSignature, notification, merchantSecret); //true
+            SiteId = "test",
+            BillId = "test_bill",
+            Amount = new MoneyAmount
+            {
+                ValueDecimal = 1m,
+                CurrencyEnum = CurrencyEnum.Rub
+            },
+            Status = new BillStatus
+            {
+                ValueEnum = BillStatusEnum.Paid
+            }
+        ),
+        Version = "1"
+    },
+    "test-merchant-secret-for-signature-check"
+));
 ```
 
 ### Использование альтернативного обработчика JSON
@@ -327,13 +371,13 @@ public interface IClient {
 Примером реализации является `ContractObjectMapper`, принимающий `System.Runtime.Serialization.Json.DataContractJsonSerializerSettings` для конфигурации совместимости формата дат.
 
 ```c#
-BillPaymentClient client = BillPaymentClientFactory.create(
+BillPaymentClient client = BillPaymentClientFactory.Create(
     secretKey,
     null,
     ObjectMapperFactory.create<ContractObjectMapper>(
         new DataContractJsonSerializerSettings
         {
-            DateTimeFormat = new DateTimeFormat(BillPaymentsClient.DatetimeFormat)
+            DateTimeFormat = new DateTimeFormat(BillPaymentsClient.DateTimeFormat)
         }
     )
 );
@@ -347,11 +391,11 @@ BillPaymentClient client = BillPaymentClientFactory.create(
 
 ```c#
 public interface IClient {
-    ResponseData request(
+    ResponseData Request(
         string method,
         string url,
         IReadOnlyDictionary<string, string> headers,
-        string entityOpt = null
+        [Optional] string entityOpt
     );
 }
 ```
@@ -361,7 +405,12 @@ public interface IClient {
 ```c#
 BillPaymentClient client = BillPaymentClientFactory.create(
     secretKey,
-    ClientFactory.create<NetClient>(new HttpClient())
+    ClientFactory.create<NetClient>(new HttpClient(
+        new HttpClientHandler()
+        {
+            Proxy: new WebProxy("http://proxyserver:80/", true)
+        }
+    ))
 );
 ```
 

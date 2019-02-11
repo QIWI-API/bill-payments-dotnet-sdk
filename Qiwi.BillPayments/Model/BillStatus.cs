@@ -1,29 +1,31 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Model
 {
+    /// <inheritdoc />
     /// <summary>
     /// The invoice status info.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
-    public class BillStatus
+    public class BillStatus : FieldsDictionary
     {
         /// <summary>
         /// The status refresh date.
         /// </summary>
         [ComVisible(true)]
-        [DataMember(Name = "datetime")]
-        public DateTime Datetime
+        [DataMember(Name = "dateTime")]
+        public DateTime DateTime
         {
             get;
             set;
         }
         
         /// <summary>
-        /// The invoice status value.
+        /// The invoice status value alias.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "value")]

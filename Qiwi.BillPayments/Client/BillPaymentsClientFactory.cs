@@ -19,7 +19,7 @@ namespace Qiwi.BillPayments.Client
         /// <param name="fingerprint">The client fingerprint.</param>
         /// <returns>The client instance.</returns>
         [ComVisible(true)]
-        public static BillPaymentsClient create(
+        public static BillPaymentsClient Create(
             string secretKey,
             IClient client = null,
             IObjectMapper objectMapper = null,
@@ -29,10 +29,10 @@ namespace Qiwi.BillPayments.Client
             return new BillPaymentsClient(
                 secretKey,
                 new RequestMappingIntercessor(
-                    client ?? ClientFactory.create(),
-                    objectMapper ?? ObjectMapperFactory.create()
+                    client ?? ClientFactory.Create(),
+                    objectMapper ?? ObjectMapperFactory.Create()
                 ),
-                fingerprint ?? FingerprintFactory.create()
+                fingerprint ?? FingerprintFactory.Create()
             );
         }
     }

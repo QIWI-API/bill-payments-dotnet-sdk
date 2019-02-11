@@ -1,15 +1,17 @@
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Model
 {
+    /// <inheritdoc />
     /// <summary>
     /// The HTTP response.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
-    public class ResponseData
+    public class ResponseData : FieldsDictionary
     {
         /// <summary>
         /// The HTTP body.

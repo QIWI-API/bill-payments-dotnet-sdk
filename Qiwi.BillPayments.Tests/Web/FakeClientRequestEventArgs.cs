@@ -1,23 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using Qiwi.BillPayments.Model;
 
 namespace Qiwi.BillPayments.Tests.Web
 {
     public class FakeClientRequestEventArgs : EventArgs
     {
-        public readonly int counter;
+        public readonly int Counter;
         
-        public readonly string method;
+        public readonly string Method;
         
-        public readonly string url;
+        public readonly string Url;
         
-        public readonly string entityOpt;
+        public readonly string EntityOpt;
         
-        public readonly IReadOnlyDictionary<string, string> headers;
+        public readonly IReadOnlyDictionary<string, string> Headers;
         
-        public ResponseData ResponseData { get; set; }
+        public ResponseData ResponseData { get; }
         
         public FakeClientRequestEventArgs(
             int counter,
@@ -29,11 +28,11 @@ namespace Qiwi.BillPayments.Tests.Web
         )
         {
             ResponseData = defaultResponseData;
-            this.counter = counter;
-            this.method = method;
-            this.url = url;
-            this.headers = headers;
-            this.entityOpt = entityOpt;
+            Counter = counter;
+            Method = method;
+            Url = url;
+            Headers = headers;
+            EntityOpt = entityOpt;
         }
     }
 }

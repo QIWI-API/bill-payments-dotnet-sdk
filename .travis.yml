@@ -11,7 +11,7 @@ script: dotnet test -c Release
 deploy:
   skip_cleanup: true
   provider: script
-  script: dotnet nuget push ./**/*.nupkg -k $ApiKey -s https://api.nuget.org/v3/index.json -n true
+  script: dotnet nuget push ./**/*.nupkg -k $ApiKey -s https://api.nuget.org/v3/index.json -n true || true
   on:
     tags: true
     branches:

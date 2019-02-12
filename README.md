@@ -47,18 +47,21 @@ var client = BillPaymentClientFactory.Create(
 
 Метод `CreatePaymentForm` создает платежную форму. В параметрах нужно указать:
 
-* ключ идентификации провайдера, полученный в QIWI Кассе, `publicKey`;
-* идентификатор счета `billId` внутри вашей системы;
-* сумму `amount`;
-* адрес перехода после успешной оплаты `successUrl`;
-* персонализация платежной формы `themeCode`.
+* данные для создания платежной формы `paymentInfo`, включая:
+  * ключ идентификации провайдера, полученный в QIWI Кассе, `PublicKey`;
+  * идентификатор счета `BillId` внутри вашей системы;
+  * сумму `Amount`;
+  * адрес перехода после успешной оплаты `SuccessUrl`;
+  * персонализация платежной формы `ThemeCode`;
+* не обязательные дополнительные данные `customFields`, включая:
+  * персонализация платежной формы `ThemeCode`.
 
 В результате будет получена ссылка на форму оплаты, которую можно передать клиенту.
 Подробнее о доступных параметрах в [документации](https://developer.qiwi.com/ru/bill-payments/#http).
 
 ```c#
 client.CreatePaymentForm(
-    new PaymentInfo
+    paymentInfo: new PaymentInfo
     {
         PublicKey = "2tbp1WQvsgQeziGY9vTLe9vDZNg7tmCymb4Lh6STQokqKrpCC6qrUUKEDZAJ7mvFnzr1yTebUiQaBLDnebLMMxL8nc6FF5zfmGQnypdXCbQJqHEJW5RJmKfj8nvgc",
         Amount = new MoneyAmount
@@ -69,7 +72,7 @@ client.CreatePaymentForm(
         BillId = Guid.NewGuid().ToString(),
         SuccessUrl = "https://merchant.com/payment/success?billId=893794793973"
     },
-    new CustomFields
+    customFields: new CustomFields
     {
         ThemeCode = "кодСтиля"
     }
@@ -81,32 +84,34 @@ client.CreatePaymentForm(
 ```c#
 new Uri(
     "https://oplata.qiwi.com/create?amount=499.90&customFields%5BapiClient%5D=dotnet_sdk&customFields%5BapiClientVersion%5D=0.1.0&customFields%5BthemeCode%5D=%D0%BA%D0%BE%D0%B4%D0%A1%D1%82%D0%B8%D0%BB%D1%8F&publicKey=2tbp1WQvsgQeziGY9vTLe9vDZNg7tmCymb4Lh6STQokqKrpCC6qrUUKEDZAJ11HeiD1GQX8jTnjMxLpMcSZuGZP7xbocwJicsoBAG1HyiPDJ8A8ecBKCKWu6FP5oa&billId=920dc584-ed30-4683-8251-486426768160&successUrl=https%3A%2F%2Fmerchant.com%2Fpayment%2Fsuccess%3FbillId%3D893794793973"
-)
+);
 ```
 
 ### Выставление счета
 
 Надежный способ для интеграции.
 Параметры передаются server2server с использованием авторизации.
-Метод позволяет выставить счет, при успешном выполнении запроса в ответе вернется параметр `payUrl` - ссылка для редиректа пользователя на платежную форму.
+Метод позволяет выставить счет, при успешном выполнении запроса в ответе вернется параметр `PayUrl` - ссылка для редиректа пользователя на платежную форму.
 
 Метод `CreateBill` выставляет новый счет.
 В параметрах нужно указать:
 
-* идентификатор счета `billId` внутри вашей системы;
-* сумма счета `amount`;
-* комментарий `comment`;
-* срок оплаты счета `expirationDateTime`;
-* информация о пользователе `customer`;
-* адрес перехода после успешной оплаты `successUrl`;
-* персонализация платежной формы `themeCode`.
+* данные для выставления стеча `info`, включая:
+  * идентификатор счета `BillId` внутри вашей системы;
+  * сумма счета `Amount`;
+  * комментарий `Comment`;
+  * срок оплаты счета `ExpirationDateTime`;
+  * информация о пользователе `Customer`;
+  * адрес перехода после успешной оплаты `SuccessUrl`;
+* не обязательные дополнительные данные `customFields`, включая:
+  * персонализация платежной формы `ThemeCode`.
 
 В результате будет получен ответ с данными о выставленном счете.
 Подробнее о доступных параметрах в [документации](https://developer.qiwi.com/ru/bill-payments/#create).
 
 ```c#
-var response = client.CreateBill(
-    new CreateBillInfo
+client.CreateBill(
+    info: new CreateBillInfo
     {
         BillId = Guid.NewGuid().ToString(),
         Amount = new MoneyAmount
@@ -124,7 +129,7 @@ var response = client.CreateBill(
         },
         SuccessUrl = new Uri("http://merchant.ru/success")
     },
-    new CustomFields
+    customFields: new CustomFields
     {
         ThemeCode = "кодСтиля"
     }
@@ -164,7 +169,7 @@ new BillResponse
         ApiClientVersion = "0.1.0",
         ThemeCode = "кодСтиля"
     }
-}
+};
 ```
 
 ### Информация о счете
@@ -174,7 +179,9 @@ new BillResponse
 Подробнее в [документации](https://developer.qiwi.com/ru/bill-payments/#invoice-status).
 
 ```c#
-client.GetBillInfo("fcb40a23-6733-4cf3-bacf-8e425fd1fc71");
+client.GetBillInfo(
+    billId: "fcb40a23-6733-4cf3-bacf-8e425fd1fc71"
+);
 ```
 
 Ответ:
@@ -209,7 +216,7 @@ new BillResponse
         ApiClient = "dotnet_sdk",
         ApiClientVersion = "0.1.0"
     }
-}
+};
 ```
 
 ### Отмена неоплаченного счета
@@ -219,7 +226,9 @@ new BillResponse
 Подробнее в [документации](https://developer.qiwi.com/ru/bill-payments/#cancel).
 
 ```c#
-client.CancelBill("fcb40a23-6733-4cf3-bacf-8e425fd1fc71");
+client.CancelBill(
+    billId: "fcb40a23-6733-4cf3-bacf-8e425fd1fc71"
+);
 ```
 
 Ответ:
@@ -254,7 +263,7 @@ new BillResponse
         ApiClient = "dotnet_sdk",
         ApiClientVersion = "0.1.0"
     }
-}
+};
 ```
 
 ### Возврат средств
@@ -293,7 +302,7 @@ new RefundResponse
     DateTime = BillPaymentsUtils.ParseDate("2018-11-03T16:11:57+03:00")
     RefundId = "3444e8ca-cf68-4dbd-92ee-f68c4bf8f29b",
     StatusString = "PARTIAL"
-}
+};
 ```
 
 ### Информация о возврате
@@ -324,7 +333,7 @@ new RefundResponse
     DateTime = BillPaymentsUtils.ParseDate("2018-11-03T16:11:57+03:00")
     RefundId = "3444e8ca-cf68-4dbd-92ee-f68c4bf8f29b",
     StatusString = "PARTIAL"
-}
+};
 ```
 
 ### Вспомогательные методы
@@ -333,28 +342,30 @@ new RefundResponse
 Принимает на вход подпись из входящего запроса, объект - тело запроса и secret ключ, с помощью которого должна осуществляться подпись:
 
 ```c#
-Assert.IsTrue(BillPaymentsUtils.CheckNotificationSignature(
-    validSignature: "07e0ebb10916d97760c196034105d010607a6c6b7d72bfa1c3451448ac484a3b",
-    notification: new Notification
-    {
-        Bill = new Bill
+Assert.IsTrue(
+    condition: BillPaymentsUtils.CheckNotificationSignature(
+        validSignature: "07e0ebb10916d97760c196034105d010607a6c6b7d72bfa1c3451448ac484a3b",
+        notification: new Notification
         {
-            SiteId = "test",
-            BillId = "test_bill",
-            Amount = new MoneyAmount
+            Bill = new Bill
             {
-                ValueDecimal = 1m,
-                CurrencyEnum = CurrencyEnum.Rub
-            },
-            Status = new BillStatus
-            {
-                ValueEnum = BillStatusEnum.Paid
-            }
-        ),
-        Version = "1"
-    },
-    "test-merchant-secret-for-signature-check"
-));
+                SiteId = "test",
+                BillId = "test_bill",
+                Amount = new MoneyAmount
+                {
+                    ValueDecimal = 1m,
+                    CurrencyEnum = CurrencyEnum.Rub
+                },
+                Status = new BillStatus
+                {
+                    ValueEnum = BillStatusEnum.Paid
+                }
+            ),
+            Version = "1"
+        },
+        merchantSecret: "test-merchant-secret-for-signature-check"
+    )
+);
 ```
 
 ### Использование альтернативного обработчика JSON
@@ -363,19 +374,19 @@ Assert.IsTrue(BillPaymentsUtils.CheckNotificationSignature(
 
 ```c#
 public interface IClient {
-    string writeValue(object entityOpt);
-    T readValue<T>(string body);
+    string WriteValue(object entityOpt);
+    T ReadValue<T>(string body);
 }
 ```
 
 Примером реализации является `ContractObjectMapper`, принимающий `System.Runtime.Serialization.Json.DataContractJsonSerializerSettings` для конфигурации совместимости формата дат.
 
 ```c#
-BillPaymentClient client = BillPaymentClientFactory.Create(
-    secretKey,
-    null,
-    ObjectMapperFactory.create<ContractObjectMapper>(
-        new DataContractJsonSerializerSettings
+BillPaymentClientFactory.Create(
+    secretKey: "eyJ2ZXJzaW9uIjoicmVzdF92MyIsImRhdGEiOnsibWVyY2hhbnRfaWQiOjUyNjgxMiwiYXBpX3VzZXJfaWQiOjcxNjI2MTk3LCJzZWNyZXQiOiJmZjBiZmJiM2UxYzc0MjY3YjIyZDIzOGYzMDBkNDhlYjhiNTnONPININONPN090MTg5Z**********************",
+    client: null,
+    objectMapper: ObjectMapperFactory.Create<ContractObjectMapper>(
+        settings: new DataContractJsonSerializerSettings
         {
             DateTimeFormat = new DateTimeFormat(BillPaymentsClient.DateTimeFormat)
         }
@@ -403,14 +414,16 @@ public interface IClient {
 Примером реализации является `NetClient`, принимающий `System.Net.Http.HttpClient` произвольной конфигурации.
 
 ```c#
-BillPaymentClient client = BillPaymentClientFactory.create(
-    secretKey,
-    ClientFactory.create<NetClient>(new HttpClient(
-        new HttpClientHandler()
-        {
-            Proxy: new WebProxy("http://proxyserver:80/", true)
-        }
-    ))
+BillPaymentClientFactory.Create(
+    secretKey: "eyJ2ZXJzaW9uIjoicmVzdF92MyIsImRhdGEiOnsibWVyY2hhbnRfaWQiOjUyNjgxMiwiYXBpX3VzZXJfaWQiOjcxNjI2MTk3LCJzZWNyZXQiOiJmZjBiZmJiM2UxYzc0MjY3YjIyZDIzOGYzMDBkNDhlYjhiNTnONPININONPN090MTg5Z**********************",
+    client: ClientFactory.Create<NetClient>(
+        httpClient: new HttpClient(
+            handler: new HttpClientHandler()
+            {
+                Proxy: new WebProxy("http://proxyserver:80/", true)
+            }
+        )
+    )
 );
 ```
 

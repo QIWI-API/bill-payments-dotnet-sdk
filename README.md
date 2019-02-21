@@ -16,7 +16,7 @@ nuget install Qiwi.BillPayments
 
 ## Документация
 
-**Универсальный платежный API**: https://developer.qiwi.com/ru/bill-payments
+**API QIWI Касса**: https://developer.qiwi.com/ru/bill-payments
 
 ## Авторизация
 

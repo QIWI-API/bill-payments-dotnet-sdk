@@ -45,14 +45,14 @@ namespace Qiwi.BillPayments.Tests.Client
         }
         
         private static void PrepareBill(
-            string value,
-            string currency,
-            string comment,
-            string email,
-            string account,
-            string phone,
-            string successUrl,
-            out CreateBillInfo createBillInfo
+            out CreateBillInfo createBillInfo,
+            string value = null,
+            string currency = null,
+            string comment = null,
+            string email = null,
+            string account = null,
+            string phone = null,
+            string successUrl = null
         )
         {
             createBillInfo = new CreateBillInfo
@@ -71,15 +71,15 @@ namespace Qiwi.BillPayments.Tests.Client
                     Account = account,
                     Phone = phone
                 },
-                SuccessUrl = new Uri(successUrl)
+                SuccessUrl = string.IsNullOrEmpty(successUrl) ? null : new Uri(successUrl)
             };
         }
         
         private static void PrepareRefund(
-            string amount,
-            string currency,
             out string refundId,
-            out MoneyAmount moneyAmount
+            out MoneyAmount moneyAmount,
+            string amount = null,
+            string currency = null
         )
         {
             refundId = Guid.NewGuid().ToString();

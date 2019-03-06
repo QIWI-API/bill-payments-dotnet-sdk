@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Qiwi.BillPayments.Exception;
@@ -14,8 +15,14 @@ namespace Qiwi.BillPayments.Client
     [ComVisible(true)]
     public class RequestMappingIntercessor
     {
+        /// <summary>
+        /// The JSON converter.
+        /// </summary>
         private readonly IObjectMapper _mapper;
         
+        /// <summary>
+        /// The HTTP client. 
+        /// </summary>
         private readonly IClient _client;
         
         /// <summary>
@@ -38,6 +45,10 @@ namespace Qiwi.BillPayments.Client
         /// <param name="entityOpt">The request body.</param>
         /// <typeparam name="T">The result type.</typeparam>
         /// <returns>The response HTTP body.</returns>
+        /// <exception cref="SerializationException">On request body serialization fail.</exception>
+        /// <exception cref="HttpClientException">On request fail.</exception>
+        /// <exception cref="BadResponseException">On response parse fail.</exception>
+        /// <exception cref="BillPaymentsServiceException">On API return error message.</exception>
         [ComVisible(true)]
         public T Request<T>(
             string method,
@@ -47,10 +58,25 @@ namespace Qiwi.BillPayments.Client
         )
         {
             var jsonOpt = SerializeRequestBody(entityOpt);
-            var response = _client.Request(method, url, headers, jsonOpt);
+            ResponseData response;
+            try
+            {
+                response = _client.Request(method, url, headers, jsonOpt);
+            }
+            catch (System.Exception exception)
+            {
+                throw new HttpClientException(exception);
+            }
+
             return DeserializeResponseBody<T>(response);
         }
         
+        /// <summary>
+        /// Convert request body object to JSON.
+        /// </summary>
+        /// <param name="entityOpt">The body object.</param>
+        /// <returns>The JSON.</returns>
+        /// <exception cref="SerializationException">On request body serialization fail.</exception>
         private string SerializeRequestBody(object entityOpt = null)
         {
             try
@@ -63,13 +89,21 @@ namespace Qiwi.BillPayments.Client
             }
         }
         
+        /// <summary>
+        /// Convert response body JSON to object.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <typeparam name="T">The object type.</typeparam>
+        /// <returns>The object.</returns>
+        /// <exception cref="BadResponseException">On response parse fail.</exception>
+        /// <exception cref="BillPaymentsServiceException">On API return error message.</exception>
         private T DeserializeResponseBody<T>(ResponseData response)
         {
+            if (string.IsNullOrEmpty(response.Body)) {
+                throw new BadResponseException(response.HttpStatus);
+            }
             try
             {
-                if (null == response.Body) {
-                    throw new BadResponseException(response.HttpStatus);
-                }
                 return _mapper.ReadValue<T>(response.Body);
             }
             catch (System.Exception)
@@ -78,6 +112,12 @@ namespace Qiwi.BillPayments.Client
             }
         }
         
+        /// <summary>
+        /// Convert error response body JSON to object. 
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>The error object.</returns>
+        /// <exception cref="BadResponseException">On error message parse fail.</exception>
         private BillPaymentsServiceException MapToError(ResponseData response)
         {
             try

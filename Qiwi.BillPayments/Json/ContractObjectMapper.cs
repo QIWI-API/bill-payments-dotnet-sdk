@@ -16,6 +16,9 @@ namespace Qiwi.BillPayments.Json
     [ComVisible(true)]
     public class ContractObjectMapper : IObjectMapper
     {
+        /// <summary>
+        /// The DataContract JSON serializer settings.
+        /// </summary>
         private readonly DataContractJsonSerializerSettings _settings;
         
         /// <inheritdoc/>

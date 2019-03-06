@@ -101,6 +101,7 @@ namespace Qiwi.BillPayments.Utils
         /// <param name="notification">The notification.</param>
         /// <param name="merchantSecret">The merchant secret key.</param>
         /// <returns>Check result.</returns>
+        /// <exception cref="EncryptionException">On compute hash fail.</exception>
         [ComVisible(true)]
         public static bool CheckNotificationSignature(
             string signature,
@@ -112,6 +113,11 @@ namespace Qiwi.BillPayments.Utils
             return hash == signature;
         }
         
+        /// <summary>
+        /// Join notification fields on string.
+        /// </summary>
+        /// <param name="notification">The notification object.</param>
+        /// <returns>The string data.</returns>
         private static string JoinFields(Notification notification) {
             var fields = new SortedDictionary<string, string>
             {
@@ -124,6 +130,13 @@ namespace Qiwi.BillPayments.Utils
             return string.Join("|", fields.Values);
         }
         
+        /// <summary>
+        /// Get encryption hash. 
+        /// </summary>
+        /// <param name="key">The encryption key.</param>
+        /// <param name="data">The string data.</param>
+        /// <returns>The hash.</returns>
+        /// <exception cref="EncryptionException">On compute hash fail.</exception>
         private static string Encrypt(string key, string data) {
             try
             {

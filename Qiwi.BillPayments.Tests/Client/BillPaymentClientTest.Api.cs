@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Qiwi.BillPayments.Client;
@@ -55,7 +56,11 @@ namespace Qiwi.BillPayments.Tests.Client
         
         [TestMethod]
         [DataRow("200.345", "http://test.ru/")]
-        public void TestCreatePaymentForm(string value, string successUrl)
+        [DataRow("200.345", null)]
+        public void TestCreatePaymentForm(
+            string value = null,
+            string successUrl = null
+        )
         {
             // Prepare
             foreach (var (client, _) in ApiDataRows)
@@ -68,7 +73,7 @@ namespace Qiwi.BillPayments.Tests.Client
                         ValueString = value
                     },
                     BillId = Guid.NewGuid().ToString(),
-                    SuccessUrl = new Uri(successUrl)
+                    SuccessUrl = string.IsNullOrEmpty(successUrl) ? null : new Uri(successUrl)
                 };
                 // Test
                 var uri = client.CreatePaymentForm(paymentInfo);
@@ -81,7 +86,14 @@ namespace Qiwi.BillPayments.Tests.Client
                 Assert.AreEqual(Config.MerchantPublicKey, query["publicKey"], "Set publicKey parameter");
                 Assert.AreEqual(paymentInfo.Amount.ValueString, query["amount"], "Set amount parameter");
                 Assert.AreEqual(paymentInfo.BillId, query["billId"], "Set billId parameter");
-                Assert.AreEqual(paymentInfo.SuccessUrl, query["successUrl"], "Set billId parameter");
+                if (string.IsNullOrEmpty(successUrl))
+                {
+                    Assert.IsFalse(query.AllKeys.Contains("successUrl"), "Don't set successUrl parameter");
+                }
+                else
+                {
+                    Assert.AreEqual(paymentInfo.SuccessUrl, query["successUrl"], "Set successUrl parameter");
+                }
             }
         }
         
@@ -89,13 +101,13 @@ namespace Qiwi.BillPayments.Tests.Client
         [Priority(1)]
         [DataRow("200.345", "RUB", "test", "test@test.ru", "user uid on your side", "79999999999", "http://test.ru/")]
         public void TestCreateBill_Api(
-            string value,
-            string currency,
-            string comment,
-            string email,
-            string account,
-            string phone,
-            string successUrl
+            string value = null,
+            string currency = null,
+            string comment = null,
+            string email = null,
+            string account = null,
+            string phone = null,
+            string successUrl = null
         )
         {
             Config.Required();
@@ -104,14 +116,14 @@ namespace Qiwi.BillPayments.Tests.Client
             {
                 var fingerprint = client.GetFingerprint();
                 PrepareBill(
+                    out var createBillInfo,
                     value,
                     currency,
                     comment,
                     email,
                     account,
                     phone,
-                    successUrl,
-                    out var createBillInfo
+                    successUrl
                 );
                 // Test
                 var billResponse = client.CreateBill(createBillInfo);
@@ -162,17 +174,20 @@ namespace Qiwi.BillPayments.Tests.Client
         [TestMethod]
         [Priority(1)]
         [DataRow("0.01", "RUB")]
-        public void TestRefundBill_Api(string amount, string currency)
+        public void TestRefundBill_Api(
+            string amount = null,
+            string currency = null
+        )
         {
             Config.Required();
             // Prepare
             foreach (var (client, presets) in ApiDataRows)
             {
                 PrepareRefund(
-                    amount,
-                    currency,
                     out var refundId,
-                    out var moneyAmount
+                    out var moneyAmount,
+                    amount,
+                    currency
                 );
                 // Test
                 var refundResponse = client.RefundBill(Config.BillIdForRefundTest, refundId, moneyAmount);

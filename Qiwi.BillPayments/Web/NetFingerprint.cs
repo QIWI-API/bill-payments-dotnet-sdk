@@ -11,6 +11,9 @@ namespace Qiwi.BillPayments.Web
     [ComVisible(true)]
     public class NetFingerprint : IFingerprint
     {
+        /// <summary>
+        /// The API client version.
+        /// </summary>
         private readonly string _clientVersion;
         
         /// <inheritdoc />

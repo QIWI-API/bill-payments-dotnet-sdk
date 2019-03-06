@@ -12,6 +12,9 @@ namespace Qiwi.BillPayments.Json.Newtonsoft
     [ComVisible(true)]
     public class NewtonsoftMapper : IObjectMapper
     {
+        /// <summary>
+        /// The JSON serializer settings.
+        /// </summary>
         private readonly JsonSerializerSettings _settings;
         
         /// <inheritdoc />

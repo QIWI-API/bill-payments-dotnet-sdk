@@ -49,14 +49,15 @@ namespace Qiwi.BillPayments.Tests.Client
         [TestMethod]
         [Priority(1)]
         [DataRow("200.345", "RUB", "test", "test@test.ru", "user uid on your side", "79999999999", "http://test.ru/")]
+        [DataRow("200.345", "RUB", "test", "test@test.ru", "user uid on your side", "79999999999", null)]
         public void TestCreateBill_Fake(
-            string value,
-            string currency,
-            string comment,
-            string email,
-            string account,
-            string phone,
-            string successUrl
+            string value = null,
+            string currency = null,
+            string comment = null,
+            string email = null,
+            string account = null,
+            string phone = null,
+            string successUrl = null
         )
         {
             // Prepare
@@ -64,14 +65,14 @@ namespace Qiwi.BillPayments.Tests.Client
             {
                 var fingerprint = client.GetFingerprint();
                 PrepareBill(
+                    out var createBillInfo,
                     value,
                     currency,
                     comment,
                     email,
                     account,
                     phone,
-                    successUrl,
-                    out var createBillInfo
+                    successUrl
                 );
                 var billResponse = new BillResponse
                 {
@@ -169,16 +170,19 @@ namespace Qiwi.BillPayments.Tests.Client
         [TestMethod]
         [Priority(1)]
         [DataRow("0.01", "RUB")]
-        public void TestRefundBill_Fake(string amount, string currency)
+        public void TestRefundBill_Fake(
+            string amount = null,
+            string currency = null
+        )
         {
             // Prepare
             foreach (var (client, presets) in _fakeDataRows)
             {
                 PrepareRefund(
-                    amount,
-                    currency,
                     out var refundId,
-                    out var moneyAmount
+                    out var moneyAmount,
+                    amount,
+                    currency
                 );
                 var refundResponse = new RefundResponse
                 {

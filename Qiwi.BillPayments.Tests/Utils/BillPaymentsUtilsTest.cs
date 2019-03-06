@@ -19,7 +19,7 @@ namespace Qiwi.BillPayments.Tests.Utils
         [TestMethod]
         [DataRow(45, null)]
         [DataRow(1, 1.0)]
-        public void TestGetTimeoutDate(int offset, double? days)
+        public void TestGetTimeoutDate(int offset, double? days = null)
         {
             var value = BillPaymentsUtils.GetTimeoutDate(days);
             Assert.IsTrue(DateTime.Now < value, "Timeout date in future");
@@ -39,11 +39,11 @@ namespace Qiwi.BillPayments.Tests.Utils
         public void TestCheckNotificationSignature(
             string merchantSecret,
             string signature,
-            string siteId,
-            string billId,
-            string value,
-            string currency,
-            string status
+            string siteId = null,
+            string billId = null,
+            string value = null,
+            string currency = null,
+            string status = null
         )
         {
             var notification = new Notification

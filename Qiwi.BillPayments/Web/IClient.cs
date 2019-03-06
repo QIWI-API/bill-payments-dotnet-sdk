@@ -23,7 +23,7 @@ namespace Qiwi.BillPayments.Web
             string method,
             string url,
             IReadOnlyDictionary<string, string> headers,
-            [Optional] string entityOpt
+            string entityOpt = null
         );
     }
 }

@@ -406,7 +406,7 @@ public interface IClient {
         string method,
         string url,
         IReadOnlyDictionary<string, string> headers,
-        [Optional] string entityOpt
+        string entityOpt = null
     );
 }
 ```
@@ -426,6 +426,17 @@ BillPaymentClientFactory.Create(
     )
 );
 ```
+
+## Работа с ошибками
+
+При использовании SDK в нештатных ситуациях могут возникать следующие исключения из пространства имен `Qiwi.BillPayments.Exception`:
+
+* `BadResponseException` - полученные от API данные не могут быть корректно разобраны в объект из JSON;
+* `BillPaymentsServiceException` - от API получено сообщение об ошибке;
+* `EncryptionException` - невозможно получить хэш строки, алгоритм не поддерживается или не задан секретный ключ;
+* `HttpClientException` - невозможно выполнить запрос к API, ошибка клиента;
+* `SerializationException` - передаваемые в API данные не могут быть корректно сериализованы в JSON;
+* `UrlEncodingException` - невозможно сформировать корректный URL. 
 
 ## Требования
 

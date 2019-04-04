@@ -28,7 +28,6 @@
         <RepositoryUrl>https://github.com/QIWI-API/bill-payments-dotcore-sdk.git</RepositoryUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <DocumentationFile>$(RootOutputPath)\bin\$(AssemblyName).xml</DocumentationFile>
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.xml;.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Optimize>true</Optimize>

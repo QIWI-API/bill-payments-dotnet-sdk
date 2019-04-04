@@ -6,7 +6,7 @@ using System.Net.Mime;
 using Qiwi.BillPayments.Model;
 using System.Runtime.InteropServices;
 using System.Text;
-using Qiwi.BillPayments.Exception;
+using System.Threading.Tasks;
 
 namespace Qiwi.BillPayments.Web
 {
@@ -49,6 +49,18 @@ namespace Qiwi.BillPayments.Web
             string entityOpt = null
         )
         {
+            return RequestAsync(method, url, headers, entityOpt).Result;
+        }
+
+        /// <inheritdoc />
+        [ComVisible(true)]
+        public async Task<ResponseData> RequestAsync(
+            string method,
+            string url,
+            IReadOnlyDictionary<string, string> headers,
+            string entityOpt = null
+        )
+        {
             var uri = new Uri(url);
             var propfindMethod = new HttpMethod(method);
             var propfindHttpRequestMessage = new HttpRequestMessage(propfindMethod, uri);
@@ -70,9 +82,11 @@ namespace Qiwi.BillPayments.Web
                         break;
                 }
             }
-            propfindHttpRequestMessage.Content =
-                new StringContent(entityOpt ?? "", Encoding.GetEncoding(contentType.CharSet ?? "utf-8"), contentType.MediaType);
-            var propfindHttpResponseMessage = _httpClient.SendAsync(propfindHttpRequestMessage).Result;
+            propfindHttpRequestMessage.Content = new StringContent(
+                entityOpt ?? "", Encoding.GetEncoding(contentType.CharSet ?? "utf-8"),
+                contentType.MediaType
+            );
+            var propfindHttpResponseMessage = await _httpClient.SendAsync(propfindHttpRequestMessage);
             return new ResponseData
             {
                 Body = Encoding.UTF8.GetString(propfindHttpResponseMessage.Content.ReadAsByteArrayAsync().Result),

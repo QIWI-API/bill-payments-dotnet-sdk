@@ -170,6 +170,8 @@ new BillResponse
 };
 ```
 
+Метод может быть вызван ассинхронно через `CreateBillAsync`.
+
 ### Информация о счете
 
 Метод `GetBillInfo` возвращает информацию о счете.
@@ -216,6 +218,8 @@ new BillResponse
     }
 };
 ```
+
+Метод может быть вызван ассинхронно через `GetBillInfoAsync`.
 
 ### Отмена неоплаченного счета
 
@@ -264,6 +268,8 @@ new BillResponse
 };
 ```
 
+Метод может быть вызван ассинхронно через `CancelBillAsync`.
+
 ### Возврат средств
 
 Метод `RefundBill` производит возврат средств.
@@ -303,6 +309,8 @@ new RefundResponse
 };
 ```
 
+Метод может быть вызван ассинхронно через `RefundBillAsync`.
+
 ### Информация о возврате
 
 Метод `GetRefundInfo` запрашивает статус возврата, в параметрах нужно указать:
@@ -334,6 +342,8 @@ new RefundResponse
     StatusString = "PARTIAL"
 };
 ```
+
+Метод может быть вызван ассинхронно через `GetRefundInfoAsync`.
 
 ### Вспомогательные методы
 
@@ -407,6 +417,12 @@ public interface IClient {
         IReadOnlyDictionary<string, string> headers,
         string entityOpt = null
     );
+    Task<ResponseData> RequestAsync(
+        string method,
+        string url,
+        IReadOnlyDictionary<string, string> headers,
+        string entityOpt = null
+    );
 }
 ```
 
@@ -435,7 +451,7 @@ BillPaymentClientFactory.Create(
 * `EncryptionException` - невозможно получить хэш строки, алгоритм не поддерживается или не задан секретный ключ;
 * `HttpClientException` - невозможно выполнить запрос к API, ошибка клиента;
 * `SerializationException` - передаваемые в API данные не могут быть корректно сериализованы в JSON;
-* `UrlEncodingException` - невозможно сформировать корректный URL. 
+* `UrlEncodingException` - невозможно сформировать корректный URL.
 
 ## Требования
 

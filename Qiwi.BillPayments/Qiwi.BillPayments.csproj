@@ -2,44 +2,51 @@
     
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;netcoreapp2.0;net45</TargetFrameworks>
-        <RootNamespace>Qiwi.BillPayments</RootNamespace>
-        <AssemblyName>Qiwi.BillPayments</AssemblyName>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <PackageVersion>0.1.1</PackageVersion>
-        <Company>QIWI JSC</Company>
+        <LangVersion>latest</LangVersion>
+        <AssemblyVersion>0.1.2.0</AssemblyVersion>
+        <FileVersion>0.1.2</FileVersion>
+        <VersionPrefix>0.1.2</VersionPrefix>
+        <PackageVersion>0.1.2</PackageVersion>
+        <VersionSuffix>release</VersionSuffix>
         <Authors>Yaraslav &lt;yaroslav@wannabe.pro&gt;</Authors>
+        <Company>QIWI JSC</Company>
         <Product>Universal payments API SDK</Product>
         <Description>QIWI Bill Payments API opens a way to operations with invoices from your service or application. Invoice is the unique request for the payment. The user may pay the invoice with any accessible means. API supports issuing and cancelling invoices, making refunds and checking operation status.</Description>
         <Copyright>Copyright © QIWI JSC 2019</Copyright>
-        <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <RepositoryUrl>https://github.com/QIWI-API/bill-payments-dotcore-sdk.git</RepositoryUrl>
-        <NeutralLanguage>en</NeutralLanguage>
-        <RepositoryType>git</RepositoryType>
-        <PackageTags>qiwi sdk</PackageTags>
-        <PackageId>Qiwi.BillPayments</PackageId>
-        <PackageIconUrl>https://avatars1.githubusercontent.com/u/29546240?s=140</PackageIconUrl>
-        <ProductVersion>0.1.1</ProductVersion>
-        <FileVersion>0.1.1</FileVersion>
-        <AssemblyVersion>0.1.1</AssemblyVersion>
+        <Summary>Client SDK for QIWI universal payments API</Summary>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <Title>QIWI SDK</Title>
         <AssemblyTitle>QIWI SDK</AssemblyTitle>
-    </PropertyGroup>
-    
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Build|AnyCPU'">
+        <AssemblyName>Qiwi.BillPayments</AssemblyName>
+        <RootNamespace>Qiwi.BillPayments</RootNamespace>
+        <PackageId>Qiwi.BillPayments</PackageId>
+        <PackageTags>qiwi sdk</PackageTags>
+        <PackageIconUrl>https://avatars1.githubusercontent.com/u/29546240?s=140</PackageIconUrl>
+        <PackageProjectUrl>https://github.com/QIWI-API/bill-payments-dotcore-sdk</PackageProjectUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/QIWI-API/bill-payments-dotcore-sdk.git</RepositoryUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DocumentationFile>$(RootOutputPath)\bin\$(AssemblyName).xml</DocumentationFile>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.xml;.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Optimize>true</Optimize>
     </PropertyGroup>
     
     <ItemGroup>
-      <Content Include="..\LICENSE">
-          <PackagePath />
-          <Pack>true</Pack>
-          <Link>LICENSE</Link>
-      </Content>
-    </ItemGroup>
-    
-    <ItemGroup>
-      <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net45'" />
-      <Reference Include="System.Web" Condition="'$(TargetFramework)' == 'net45'" />
+        <Content Include="..\LICENSE">
+            <PackagePath />
+            <Pack>true</Pack>
+            <Link>LICENSE</Link>
+        </Content>
+        <Content Include="..\README.md">
+            <PackagePath />
+            <Pack>true</Pack>
+            <Link>README.md</Link>
+        </Content>
+        <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net45'" />
+        <Reference Include="System.Web" Condition="'$(TargetFramework)' == 'net45'" />
     </ItemGroup>
     
 </Project>

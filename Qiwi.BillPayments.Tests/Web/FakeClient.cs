@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Qiwi.BillPayments.Json;
 using Qiwi.BillPayments.Model;
 using Qiwi.BillPayments.Web;
@@ -27,6 +28,16 @@ namespace Qiwi.BillPayments.Tests.Web
             string entityOpt = null
         )
         {
+            return RequestAsync(method, url, headers, entityOpt).Result;
+        }
+        
+        public async Task<ResponseData> RequestAsync(
+            string method,
+            string url,
+            IReadOnlyDictionary<string, string> headers,
+            string entityOpt = null
+        )
+        {
             var args = new FakeClientRequestEventArgs(
                 RequestCounter += 1,
                 DefaultResponseData,
@@ -36,6 +47,7 @@ namespace Qiwi.BillPayments.Tests.Web
                 entityOpt
             );
             OnRequest?.Invoke(this, args);
+            await Task.Delay(0);
             return args.ResponseData;
         }
     }

@@ -37,7 +37,7 @@ namespace Qiwi.BillPayments.Utils
             }
             catch
             {
-                return default(T);
+                return default;
             }
         }
     }

@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Qiwi.BillPayments.Exception;
 using Qiwi.BillPayments.Json;
 using Qiwi.BillPayments.Model;
@@ -57,11 +57,35 @@ namespace Qiwi.BillPayments.Client
             object entityOpt = null
         )
         {
+            return RequestAsync<T>(method, url, headers, entityOpt).Result;
+        }
+        
+        /// <summary>
+        /// Make the API request asynchronously.
+        /// </summary>
+        /// <param name="method">The HTTP method.</param>
+        /// <param name="url">The endpoint URL.</param>
+        /// <param name="headers">The HTTP headers.</param>
+        /// <param name="entityOpt">The request body.</param>
+        /// <typeparam name="T">The result type.</typeparam>
+        /// <returns>The response HTTP body.</returns>
+        /// <exception cref="SerializationException">On request body serialization fail.</exception>
+        /// <exception cref="HttpClientException">On request fail.</exception>
+        /// <exception cref="BadResponseException">On response parse fail.</exception>
+        /// <exception cref="BillPaymentsServiceException">On API return error message.</exception>
+        [ComVisible(true)]
+        public async Task<T> RequestAsync<T>(
+            string method,
+            string url,
+            Dictionary<string, string> headers,
+            object entityOpt = null
+        )
+        {
             var jsonOpt = SerializeRequestBody(entityOpt);
             ResponseData response;
             try
             {
-                response = _client.Request(method, url, headers, jsonOpt);
+                response = await _client.RequestAsync(method, url, headers, jsonOpt);
             }
             catch (System.Exception exception)
             {

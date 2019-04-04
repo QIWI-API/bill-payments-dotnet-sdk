@@ -24,6 +24,9 @@ namespace Qiwi.BillPayments.Model.In
             set;
         }
         
+        /// <summary>
+        /// The invoice commentary.
+        /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "comment")]
         public string Comment
@@ -33,7 +36,7 @@ namespace Qiwi.BillPayments.Model.In
         }
         
         /// <summary>
-        /// The invoice commentary.
+        /// The invoice expiration date.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "expirationDateTime")]

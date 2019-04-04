@@ -12,7 +12,6 @@ using Qiwi.BillPayments.Model.Out;
 
 namespace Qiwi.BillPayments.Tests.Client
 {
-    [TestClass]
     public partial class BillPaymentClientTest
     {
         private class ApiPresets

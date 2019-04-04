@@ -10,6 +10,7 @@ using Qiwi.BillPayments.Web;
 
 namespace Qiwi.BillPayments.Tests.Client
 {
+    [TestClass]
     public partial class BillPaymentClientTest
     {
         private static Uri PayUri => (Uri) _testContext.Properties["payUri"];

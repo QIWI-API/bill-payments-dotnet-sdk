@@ -82,10 +82,16 @@ namespace Qiwi.BillPayments.Web
                         break;
                 }
             }
-            propfindHttpRequestMessage.Content = new StringContent(
-                entityOpt ?? "", Encoding.GetEncoding(contentType.CharSet ?? "utf-8"),
-                contentType.MediaType
-            );
+
+            if (!string.IsNullOrEmpty(entityOpt))
+            {
+                propfindHttpRequestMessage.Content = new StringContent(
+                    entityOpt,
+                    Encoding.GetEncoding(contentType.CharSet ?? "utf-8"),
+                    contentType.MediaType
+                );
+            }
+
             var propfindHttpResponseMessage = await _httpClient.SendAsync(propfindHttpRequestMessage);
             return new ResponseData
             {

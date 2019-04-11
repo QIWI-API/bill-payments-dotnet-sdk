@@ -14,15 +14,9 @@ namespace Qiwi.BillPayments.Tests.Client
 {
     public partial class BillPaymentClientTest
     {
-        private class ApiPresets
-        {
-            public List<BillResponse> Bills { get; set; }
-            public List<RefundResponse> Refunds { get; set; }
-        }
-        
         private static IReadOnlyDictionary<BillPaymentsClient, ApiPresets> ApiDataRows
             => (Dictionary<BillPaymentsClient, ApiPresets>) _testContext.Properties["apiDataRows"];
-        
+
         private static void ClassInitialize_Api()
         {
             _testContext.Properties.Add(
@@ -52,7 +46,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 }
             );
         }
-        
+
         [TestMethod]
         [DataRow("200.345", "http://test.ru/")]
         [DataRow("200.345", null)]
@@ -86,16 +80,12 @@ namespace Qiwi.BillPayments.Tests.Client
                 Assert.AreEqual(paymentInfo.Amount.ValueString, query["amount"], "Set amount parameter");
                 Assert.AreEqual(paymentInfo.BillId, query["billId"], "Set billId parameter");
                 if (string.IsNullOrEmpty(successUrl))
-                {
                     Assert.IsFalse(query.AllKeys.Contains("successUrl"), "Don't set successUrl parameter");
-                }
                 else
-                {
                     Assert.AreEqual(paymentInfo.SuccessUrl, query["successUrl"], "Set successUrl parameter");
-                }
             }
         }
-        
+
         [TestMethod]
         [Priority(1)]
         [DataRow("200.345", "RUB", "test", "test@test.ru", "user uid on your side", "79999999999", "http://test.ru/")]
@@ -131,7 +121,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 TestCreateBill_Assert(createBillInfo, fingerprint, billResponse);
             }
         }
-        
+
         [TestMethod]
         [Priority(2)]
         public void TestGetBillInfo_Api()
@@ -150,7 +140,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 }
             }
         }
-        
+
         [TestMethod]
         [Priority(3)]
         public void TestCancelBill_Api()
@@ -169,7 +159,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 }
             }
         }
-        
+
         [TestMethod]
         [Priority(1)]
         [DataRow("0.01", "RUB")]
@@ -195,7 +185,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 TestRefundBill_Assert(refundId, moneyAmount, refundResponse);
             }
         }
-        
+
         [TestMethod]
         [Priority(2)]
         public void TestGetRefundInfo_Api()
@@ -213,6 +203,12 @@ namespace Qiwi.BillPayments.Tests.Client
                     TestGetRefundInfo_Assert(refund, refundResponse);
                 }
             }
+        }
+
+        private class ApiPresets
+        {
+            public List<BillResponse> Bills { get; set; }
+            public List<RefundResponse> Refunds { get; set; }
         }
     }
 }

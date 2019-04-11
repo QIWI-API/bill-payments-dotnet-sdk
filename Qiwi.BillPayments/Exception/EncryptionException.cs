@@ -5,7 +5,7 @@ namespace Qiwi.BillPayments.Exception
 {
     /// <inheritdoc />
     /// <summary>
-    /// The hash encryption error.
+    ///     The hash encryption error.
     /// </summary>
     [ComVisible(true)]
     [Serializable]
@@ -13,7 +13,7 @@ namespace Qiwi.BillPayments.Exception
     {
         /// <inheritdoc />
         /// <summary>
-        /// The constructor.
+        ///     The constructor.
         /// </summary>
         /// <param name="cause">The error cause.</param>
         public EncryptionException(System.Exception cause) : base(cause.Message, cause)

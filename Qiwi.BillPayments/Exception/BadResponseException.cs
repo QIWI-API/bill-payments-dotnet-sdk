@@ -7,21 +7,20 @@ namespace Qiwi.BillPayments.Exception
 {
     /// <inheritdoc />
     /// <summary>
-    /// Bad response from API.
+    ///     Bad response from API.
     /// </summary>
     [ComVisible(true)]
     [Serializable]
     public class BadResponseException : System.Exception
     {
         /// <summary>
-        /// The response HTTP status code.
+        ///     The response HTTP status code.
         /// </summary>
-        [ComVisible(true)]
-        public readonly HttpStatusCode HttpStatus;
-        
+        [ComVisible(true)] public readonly HttpStatusCode HttpStatus;
+
         /// <inheritdoc />
         /// <summary>
-        /// THe constructor.
+        ///     THe constructor.
         /// </summary>
         /// <param name="responseData">The response data.</param>
         public BadResponseException(ResponseData responseData)
@@ -29,10 +28,10 @@ namespace Qiwi.BillPayments.Exception
         {
             HttpStatus = responseData.HttpStatus;
         }
-        
+
         /// <inheritdoc />
         /// <summary>
-        /// THe constructor.
+        ///     THe constructor.
         /// </summary>
         /// <param name="httpStatus">The response HTTP status.</param>
         public BadResponseException(HttpStatusCode httpStatus)

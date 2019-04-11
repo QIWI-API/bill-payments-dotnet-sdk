@@ -8,22 +8,22 @@ using Qiwi.BillPayments.Client;
 
 namespace Qiwi.BillPayments.Json
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     /// <summary>
-    /// Data contract JSON serializer mapper.
-    /// https://docs.microsoft.com/en-us/dotnet/api/system.runtime.serialization.json.datacontractjsonserializer?view=netcore-2.0
+    ///     Data contract JSON serializer mapper.
+    ///     https://docs.microsoft.com/en-us/dotnet/api/system.runtime.serialization.json.datacontractjsonserializer?view=netcore-2.0
     /// </summary>
     [ComVisible(true)]
     public class ContractObjectMapper : IObjectMapper
     {
         /// <summary>
-        /// The DataContract JSON serializer settings.
+        ///     The DataContract JSON serializer settings.
         /// </summary>
         private readonly DataContractJsonSerializerSettings _settings;
-        
-        /// <inheritdoc/>
+
+        /// <inheritdoc />
         /// <summary>
-        /// The constructor.
+        ///     The constructor.
         /// </summary>
         public ContractObjectMapper() : this(
             new DataContractJsonSerializerSettings
@@ -33,16 +33,16 @@ namespace Qiwi.BillPayments.Json
         )
         {
         }
-        
+
         /// <summary>
-        /// The constructor.
+        ///     The constructor.
         /// </summary>
         /// <param name="settings">The serializer settings.</param>
         public ContractObjectMapper(DataContractJsonSerializerSettings settings)
         {
             _settings = settings;
         }
-        
+
         /// <inheritdoc />
         [ComVisible(true)]
         public string WriteValue(object entityOpt)
@@ -54,7 +54,7 @@ namespace Qiwi.BillPayments.Json
             stream.Close();
             return json;
         }
-        
+
         /// <inheritdoc />
         [ComVisible(true)]
         public T ReadValue<T>(string body)

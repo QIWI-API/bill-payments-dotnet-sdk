@@ -23,9 +23,9 @@ namespace Qiwi.BillPayments.Tests.Utils
         {
             var value = BillPaymentsUtils.GetTimeoutDate(days);
             Assert.IsTrue(DateTime.Now < value, "Timeout date in future");
-            Assert.AreEqual(offset, (value - DateTime.Now).Days + 1, "Timeout date offset");   
+            Assert.AreEqual(offset, (value - DateTime.Now).Days + 1, "Timeout date offset");
         }
-        
+
         [TestMethod]
         [DataRow(
             "test-merchant-secret-for-signature-check",

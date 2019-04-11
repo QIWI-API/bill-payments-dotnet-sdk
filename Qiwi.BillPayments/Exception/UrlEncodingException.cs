@@ -5,15 +5,15 @@ namespace Qiwi.BillPayments.Exception
 {
     /// <inheritdoc />
     /// <summary>
-    /// The URL encoding error.
+    ///     The URL encoding error.
     /// </summary>
     [ComVisible(true)]
     [Serializable]
-    public class UrlEncodingException: System.Exception
+    public class UrlEncodingException : System.Exception
     {
         /// <inheritdoc />
         /// <summary>
-        /// The constructor.
+        ///     The constructor.
         /// </summary>
         /// <param name="cause">The error cause.</param>
         public UrlEncodingException(System.Exception cause) : base(cause.Message, cause)

@@ -7,27 +7,25 @@ namespace Qiwi.BillPayments.Exception
 {
     /// <inheritdoc />
     /// <summary>
-    /// The API error response.
+    ///     The API error response.
     /// </summary>
     [ComVisible(true)]
     [Serializable]
     public class BillPaymentsServiceException : System.Exception
     {
         /// <summary>
-        /// The API response.
+        ///     The HTTP status code.
         /// </summary>
-        [ComVisible(true)]
-        public readonly ErrorResponse Response;
-        
+        [ComVisible(true)] public readonly HttpStatusCode HttpStatus;
+
         /// <summary>
-        /// The HTTP status code.
+        ///     The API response.
         /// </summary>
-        [ComVisible(true)]
-        public readonly HttpStatusCode HttpStatus;
-        
+        [ComVisible(true)] public readonly ErrorResponse Response;
+
         /// <inheritdoc />
         /// <summary>
-        /// The constructor.
+        ///     The constructor.
         /// </summary>
         /// <param name="response">The API response.</param>
         /// <param name="httpStatus">The HTTP status code.</param>

@@ -7,17 +7,15 @@ namespace Qiwi.BillPayments.Tests.Web
     public class FakeClientRequestEventArgs : EventArgs
     {
         public readonly int Counter;
-        
-        public readonly string Method;
-        
-        public readonly string Url;
-        
+
         public readonly string EntityOpt;
-        
+
         public readonly IReadOnlyDictionary<string, string> Headers;
-        
-        public ResponseData ResponseData { get; }
-        
+
+        public readonly string Method;
+
+        public readonly string Url;
+
         public FakeClientRequestEventArgs(
             int counter,
             ResponseData defaultResponseData,
@@ -34,5 +32,7 @@ namespace Qiwi.BillPayments.Tests.Web
             Headers = headers;
             EntityOpt = entityOpt;
         }
+
+        public ResponseData ResponseData { get; }
     }
 }

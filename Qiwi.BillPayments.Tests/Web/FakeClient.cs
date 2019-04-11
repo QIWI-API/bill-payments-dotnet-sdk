@@ -7,20 +7,18 @@ using Qiwi.BillPayments.Web;
 namespace Qiwi.BillPayments.Tests.Web
 {
     public class FakeClient : IClient
-    {   
-        public event FakeClientRequestHandler OnRequest;
-
-        public IObjectMapper ObjectMapper { get; }
-
-        public int RequestCounter { private get; set; }
-        
-        public ResponseData DefaultResponseData { private get; set; } = new ResponseData();
-        
+    {
         public FakeClient(IObjectMapper objectMapper)
         {
             ObjectMapper = objectMapper;
         }
-        
+
+        public IObjectMapper ObjectMapper { get; }
+
+        public int RequestCounter { private get; set; }
+
+        public ResponseData DefaultResponseData { private get; set; } = new ResponseData();
+
         public ResponseData Request(
             string method,
             string url,
@@ -30,7 +28,7 @@ namespace Qiwi.BillPayments.Tests.Web
         {
             return RequestAsync(method, url, headers, entityOpt).Result;
         }
-        
+
         public async Task<ResponseData> RequestAsync(
             string method,
             string url,
@@ -50,5 +48,7 @@ namespace Qiwi.BillPayments.Tests.Web
             await Task.Delay(0);
             return args.ResponseData;
         }
+
+        public event FakeClientRequestHandler OnRequest;
     }
 }

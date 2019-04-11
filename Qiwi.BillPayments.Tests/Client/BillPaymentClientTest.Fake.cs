@@ -15,37 +15,33 @@ namespace Qiwi.BillPayments.Tests.Client
 {
     public partial class BillPaymentClientTest
     {
-        private class FakeApiPresets : ApiPresets
-        {
-            public FakeClient Client { get; set; }
-        }
-        
         private readonly IReadOnlyDictionary<BillPaymentsClient, FakeApiPresets> _fakeDataRows
             = (IReadOnlyDictionary<BillPaymentsClient, FakeApiPresets>) _testContext.Properties["fakeDataRows"];
-        
+
         private static void ClassInitialize_Fake()
         {
             _testContext.Properties.Add(
                 "fakeDataRows",
                 new Dictionary<BillPaymentsClient, FakeApiPresets>(
-                new[]
-                    {
-                        new FakeClient(ObjectMapperFactory.Create()),
-                        new FakeClient(ObjectMapperFactory.Create<NewtonsoftMapper>())
-                    }
-                    .Select(fakeClient => new KeyValuePair<BillPaymentsClient, FakeApiPresets>(
-                        BillPaymentsClientFactory.Create(Config.MerchantSecretKey, fakeClient, fakeClient.ObjectMapper),
-                        new FakeApiPresets
+                    new[]
                         {
-                            Client = fakeClient,
-                            Bills = new List<BillResponse>(),
-                            Refunds = new List<RefundResponse>()
+                            new FakeClient(ObjectMapperFactory.Create()),
+                            new FakeClient(ObjectMapperFactory.Create<NewtonsoftMapper>())
                         }
-                    ))
+                        .Select(fakeClient => new KeyValuePair<BillPaymentsClient, FakeApiPresets>(
+                            BillPaymentsClientFactory.Create(Config.MerchantSecretKey, fakeClient,
+                                fakeClient.ObjectMapper),
+                            new FakeApiPresets
+                            {
+                                Client = fakeClient,
+                                Bills = new List<BillResponse>(),
+                                Refunds = new List<RefundResponse>()
+                            }
+                        ))
                 )
             );
         }
-        
+
         [TestMethod]
         [Priority(1)]
         [DataRow("200.345", "RUB", "test", "test@test.ru", "user uid on your side", "79999999999", "http://test.ru/")]
@@ -103,7 +99,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 TestCreateBill_Assert(createBillInfo, fingerprint, billResponse);
             }
         }
-        
+
         [TestMethod]
         [Priority(2)]
         public void TestGetBillInfo_Fake()
@@ -114,7 +110,6 @@ namespace Qiwi.BillPayments.Tests.Client
                 Assert.AreNotSame(0, presets.Bills.Count, "Bill will be create");
                 foreach (var bill in presets.Bills)
                 {
-                    
                     ResetClient(presets.Client, bill);
                     // Test
                     presets.Client.OnRequest += TestGetBillInfo_OnRequest;
@@ -125,7 +120,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 }
             }
         }
-        
+
         [TestMethod]
         [Priority(3)]
         public void TestCancelBill_Fake()
@@ -166,7 +161,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 }
             }
         }
-        
+
         [TestMethod]
         [Priority(1)]
         [DataRow("0.01", "RUB")]
@@ -201,7 +196,7 @@ namespace Qiwi.BillPayments.Tests.Client
                 TestRefundBill_Assert(refundId, moneyAmount, refundResponse);
             }
         }
-        
+
         [TestMethod]
         [Priority(2)]
         public void TestGetRefundInfo_Fake()
@@ -240,25 +235,30 @@ namespace Qiwi.BillPayments.Tests.Client
             Assert.AreEqual(1, args.Counter, "One request");
             Assert.AreEqual("PUT", args.Method, "Equal method");
             Assert.AreEqual(BillPaymentsClient.BillsUrl + billResponse.BillId, args.Url, "Equal url");
-            Assert.AreEqual("Bearer " + Config.MerchantSecretKey, args.Headers["Authorization"], "Authorization bearer");
+            Assert.AreEqual("Bearer " + Config.MerchantSecretKey, args.Headers["Authorization"],
+                "Authorization bearer");
             Assert.AreEqual("application/json", args.Headers["Accept"], "Accept bearer");
             Assert.AreEqual("application/json", args.Headers["Content-Type"], "Content type bearer");
-            Assert.AreEqual(billResponse.Amount.ValueDecimal, createBillRequest.Amount.ValueDecimal, "Same amount value");
-            Assert.AreEqual(billResponse.Amount.CurrencyEnum, createBillRequest.Amount.CurrencyEnum, "Same amount currency");
+            Assert.AreEqual(billResponse.Amount.ValueDecimal, createBillRequest.Amount.ValueDecimal,
+                "Same amount value");
+            Assert.AreEqual(billResponse.Amount.CurrencyEnum, createBillRequest.Amount.CurrencyEnum,
+                "Same amount currency");
             Assert.AreEqual(billResponse.Comment, createBillRequest.Comment, "Same amount currency");
-            Assert.AreEqual(billResponse.ExpirationDateTime, createBillRequest.ExpirationDateTime, "Same expiration dateTime");
+            Assert.AreEqual(billResponse.ExpirationDateTime, createBillRequest.ExpirationDateTime,
+                "Same expiration dateTime");
             Assert.AreEqual(billResponse.Customer.Email, createBillRequest.Customer.Email, "Same email");
             Assert.AreEqual(billResponse.Customer.Account, createBillRequest.Customer.Account, "Same account");
             Assert.AreEqual(billResponse.Customer.Phone, createBillRequest.Customer.Phone, "Same phone");
         }
-        
+
         private static void TestGetBillInfo_OnRequest(FakeClient sender, FakeClientRequestEventArgs args)
         {
             var billResponse = sender.ObjectMapper.ReadValue<BillResponse>(args.ResponseData.Body);
             Assert.AreEqual(1, args.Counter, "One request");
             Assert.AreEqual("GET", args.Method, "Equal method");
             Assert.AreEqual(BillPaymentsClient.BillsUrl + billResponse.BillId, args.Url, "Equal url");
-            Assert.AreEqual("Bearer " + Config.MerchantSecretKey, args.Headers["Authorization"], "Authorization bearer");
+            Assert.AreEqual("Bearer " + Config.MerchantSecretKey, args.Headers["Authorization"],
+                "Authorization bearer");
             Assert.AreEqual("application/json", args.Headers["Accept"], "Accept bearer");
             Assert.IsNull(args.EntityOpt, "No body request");
         }
@@ -269,34 +269,49 @@ namespace Qiwi.BillPayments.Tests.Client
             Assert.AreEqual(1, args.Counter, "One request");
             Assert.AreEqual("POST", args.Method, "Equal method");
             Assert.AreEqual(BillPaymentsClient.BillsUrl + billResponse.BillId + "/reject", args.Url, "Equal url");
-            Assert.AreEqual("Bearer " + Config.MerchantSecretKey, args.Headers["Authorization"], "Authorization bearer");
+            Assert.AreEqual("Bearer " + Config.MerchantSecretKey, args.Headers["Authorization"],
+                "Authorization bearer");
             Assert.AreEqual("application/json", args.Headers["Accept"], "Accept bearer");
-            Assert.IsNull(args.EntityOpt, "No body request");
+            Assert.AreEqual("application/json", args.Headers["Content-Type"], "Content type bearer");
+            Assert.AreEqual("", args.EntityOpt, "No body request");
         }
-        
+
         private static void TestRefundBill_OnRequest(FakeClient sender, FakeClientRequestEventArgs args)
         {
             var refundResponse = sender.ObjectMapper.ReadValue<RefundResponse>(args.ResponseData.Body);
             var refundBillRequest = sender.ObjectMapper.ReadValue<RefundBillRequest>(args.EntityOpt);
             Assert.AreEqual(1, args.Counter, "One request");
             Assert.AreEqual("PUT", args.Method, "Equal method");
-            Assert.AreEqual(BillPaymentsClient.BillsUrl + Config.BillIdForRefundTest + "/refunds/" + refundResponse.RefundId, args.Url, "Equal url");
-            Assert.AreEqual("Bearer " + Config.MerchantSecretKey, args.Headers["Authorization"], "Authorization bearer");
+            Assert.AreEqual(
+                BillPaymentsClient.BillsUrl + Config.BillIdForRefundTest + "/refunds/" + refundResponse.RefundId,
+                args.Url, "Equal url");
+            Assert.AreEqual("Bearer " + Config.MerchantSecretKey, args.Headers["Authorization"],
+                "Authorization bearer");
             Assert.AreEqual("application/json", args.Headers["Accept"], "Accept bearer");
             Assert.AreEqual("application/json", args.Headers["Content-Type"], "Content type bearer");
-            Assert.AreEqual(refundResponse.Amount.ValueDecimal, refundBillRequest.Amount.ValueDecimal, "Same amount value");
-            Assert.AreEqual(refundResponse.Amount.CurrencyEnum, refundBillRequest.Amount.CurrencyEnum, "Same amount currency");
+            Assert.AreEqual(refundResponse.Amount.ValueDecimal, refundBillRequest.Amount.ValueDecimal,
+                "Same amount value");
+            Assert.AreEqual(refundResponse.Amount.CurrencyEnum, refundBillRequest.Amount.CurrencyEnum,
+                "Same amount currency");
         }
-        
+
         private static void TestGetRefundInfo_OnRequest(FakeClient sender, FakeClientRequestEventArgs args)
         {
             var refundResponse = sender.ObjectMapper.ReadValue<RefundResponse>(args.ResponseData.Body);
             Assert.AreEqual(1, args.Counter, "One request");
             Assert.AreEqual("GET", args.Method, "Equal method");
-            Assert.AreEqual(BillPaymentsClient.BillsUrl + Config.BillIdForRefundTest + "/refunds/" + refundResponse.RefundId, args.Url, "Equal url");
-            Assert.AreEqual("Bearer " + Config.MerchantSecretKey, args.Headers["Authorization"], "Authorization bearer");
+            Assert.AreEqual(
+                BillPaymentsClient.BillsUrl + Config.BillIdForRefundTest + "/refunds/" + refundResponse.RefundId,
+                args.Url, "Equal url");
+            Assert.AreEqual("Bearer " + Config.MerchantSecretKey, args.Headers["Authorization"],
+                "Authorization bearer");
             Assert.AreEqual("application/json", args.Headers["Accept"], "Accept bearer");
             Assert.IsNull(args.EntityOpt, "No body request");
+        }
+
+        private class FakeApiPresets : ApiPresets
+        {
+            public FakeClient Client { get; set; }
         }
     }
 }

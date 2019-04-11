@@ -7,25 +7,21 @@ namespace Qiwi.BillPayments.Model
 {
     /// <inheritdoc />
     /// <summary>
-    /// The invoice status info.
+    ///     The invoice status info.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
     public class BillStatus : FieldsDictionary
     {
         /// <summary>
-        /// The status refresh date.
+        ///     The status refresh date.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "dateTime")]
-        public DateTime DateTime
-        {
-            get;
-            set;
-        }
-        
+        public DateTime DateTime { get; set; }
+
         /// <summary>
-        /// The invoice status value alias.
+        ///     The invoice status value alias.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "value")]
@@ -34,16 +30,12 @@ namespace Qiwi.BillPayments.Model
             get => ValueEnum.ToString();
             set => ValueEnum = BillStatusEnum.Parse(value);
         }
-        
+
         /// <summary>
-        /// The invoice status value.
+        ///     The invoice status value.
         /// </summary>
         [ComVisible(true)]
         [IgnoreDataMember]
-        public BillStatusEnum ValueEnum
-        {
-            get;
-            set;
-        }
+        public BillStatusEnum ValueEnum { get; set; }
     }
 }

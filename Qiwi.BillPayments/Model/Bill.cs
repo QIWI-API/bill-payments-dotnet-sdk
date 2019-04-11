@@ -6,54 +6,38 @@ namespace Qiwi.BillPayments.Model
 {
     /// <inheritdoc />
     /// <summary>
-    /// The invoice info.
+    ///     The invoice info.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
     public class Bill : FieldsDictionary
     {
         /// <summary>
-        /// The merchant’s site identifier.
+        ///     The merchant’s site identifier.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "siteId")]
-        public string SiteId
-        {
-            get;
-            set;
-        }
-        
+        public string SiteId { get; set; }
+
         /// <summary>
-        /// The unique invoice identifier in the merchant’s system.
+        ///     The unique invoice identifier in the merchant’s system.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "billId")]
-        public string BillId
-        {
-            get;
-            set;
-        }
-        
+        public string BillId { get; set; }
+
         /// <summary>
-        /// The invoice amount info.
+        ///     The invoice amount info.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "amount")]
-        public MoneyAmount Amount
-        {
-            get;
-            set;
-        }
-        
+        public MoneyAmount Amount { get; set; }
+
         /// <summary>
-        /// The invoice status info.
+        ///     The invoice status info.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "status")]
-        public BillStatus Status
-        {
-            get;
-            set;
-        }
+        public BillStatus Status { get; set; }
     }
 }

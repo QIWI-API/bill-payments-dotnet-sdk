@@ -5,13 +5,13 @@ using Qiwi.BillPayments.Web;
 namespace Qiwi.BillPayments.Client
 {
     /// <summary>
-    /// Factory for API client.
+    ///     Factory for API client.
     /// </summary>
     [ComVisible(true)]
     public static class BillPaymentsClientFactory
     {
         /// <summary>
-        /// Make QIWI Universal Payment Protocol API client instance.
+        ///     Make QIWI Universal Payment Protocol API client instance.
         /// </summary>
         /// <param name="secretKey">The merchant secret key.</param>
         /// <param name="client">The HTTP protocol mapper.</param>

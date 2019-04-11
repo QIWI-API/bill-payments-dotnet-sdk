@@ -8,28 +8,41 @@ namespace Qiwi.BillPayments.Utils
 {
     /// <inheritdoc />
     /// <summary>
-    /// String enum abstraction.
+    ///     String enum abstraction.
     /// </summary>
     /// <typeparam name="T">The string enum type.</typeparam>
     [ComVisible(true)]
     public abstract class StringEnum<T> : IEquatable<T> where T : StringEnum<T>
     {
         /// <summary>
-        /// The enum item value.
+        ///     The enum item value.
         /// </summary>
         public readonly string Value;
-        
+
         /// <summary>
-        /// The enum item constructor.
+        ///     The enum item constructor.
         /// </summary>
         /// <param name="value">The enum item value.</param>
         protected StringEnum(string value)
         {
             Value = value;
         }
-        
+
+        /// <inheritdoc />
         /// <summary>
-        /// To string.
+        ///     Compare enum items.
+        /// </summary>
+        /// <param name="other">The enum item value.</param>
+        /// <returns>The comparison result.</returns>
+        [ComVisible(true)]
+        public bool Equals(T other)
+        {
+            if (other == null) return false;
+            return Value == other.Value;
+        }
+
+        /// <summary>
+        ///     To string.
         /// </summary>
         /// <returns>The enum item value.</returns>
         [ComVisible(true)]
@@ -37,9 +50,9 @@ namespace Qiwi.BillPayments.Utils
         {
             return Value;
         }
-        
+
         /// <summary>
-        /// Get all enum items.
+        ///     Get all enum items.
         /// </summary>
         /// <returns>The enum items.</returns>
         [ComVisible(true)]
@@ -50,9 +63,9 @@ namespace Qiwi.BillPayments.Utils
                 .Select(p => (T) p.GetValue(null))
                 .ToList();
         }
-        
+
         /// <summary>
-        /// String to enum item.
+        ///     String to enum item.
         /// </summary>
         /// <param name="value">The enum item value.</param>
         /// <returns></returns>
@@ -62,22 +75,9 @@ namespace Qiwi.BillPayments.Utils
             var all = AsList();
             return all.All(a => a.Value != value) ? null : all.Single(a => a.Value == value);
         }
-        
-        /// <inheritdoc />
+
         /// <summary>
-        /// Compare enum items.
-        /// </summary>
-        /// <param name="other">The enum item value.</param>
-        /// <returns>The comparison result.</returns>
-        [ComVisible(true)]
-        public bool Equals(T other)
-        {
-            if (other == null) return false;
-            return Value == other.Value;
-        }
-        
-        /// <summary>
-        /// Compare enum items.
+        ///     Compare enum items.
         /// </summary>
         /// <param name="obj">The enum item value.</param>
         /// <returns>The comparison result.</returns>
@@ -94,9 +94,9 @@ namespace Qiwi.BillPayments.Utils
                     return false;
             }
         }
-        
+
         /// <summary>
-        /// Get hash code.
+        ///     Get hash code.
         /// </summary>
         /// <returns>The enum item value hash code.</returns>
         [ComVisible(true)]
@@ -104,9 +104,9 @@ namespace Qiwi.BillPayments.Utils
         {
             return Value.GetHashCode();
         }
-        
+
         /// <summary>
-        /// The equals operator.
+        ///     The equals operator.
         /// </summary>
         /// <param name="a">The enum item.</param>
         /// <param name="b">The enum item.</param>
@@ -116,9 +116,9 @@ namespace Qiwi.BillPayments.Utils
         {
             return a?.Equals(b) ?? false;
         }
-        
+
         /// <summary>
-        /// The not equals operator.
+        ///     The not equals operator.
         /// </summary>
         /// <param name="a">The enum item.</param>
         /// <param name="b">The enum item.</param>
@@ -128,5 +128,5 @@ namespace Qiwi.BillPayments.Utils
         {
             return !(a?.Equals(b) ?? false);
         }
-    } 
+    }
 }

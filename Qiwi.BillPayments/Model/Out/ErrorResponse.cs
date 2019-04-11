@@ -7,76 +7,52 @@ namespace Qiwi.BillPayments.Model.Out
 {
     /// <inheritdoc />
     /// <summary>
-    /// The error response.
+    ///     The error response.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
     public class ErrorResponse : FieldsDictionary
     {
         /// <summary>
-        /// The service name.
+        ///     The service name.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "serviceName")]
-        public string ServiceName
-        {
-            get;
-            set;
-        }
-        
+        public string ServiceName { get; set; }
+
         /// <summary>
-        /// The error code.
+        ///     The error code.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "errorCode")]
-        public string ErrorCode
-        {
-            get;
-            set;
-        }
-        
+        public string ErrorCode { get; set; }
+
         /// <summary>
-        /// The description.
+        ///     The description.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "description")]
-        public string Description
-        {
-            get;
-            set;
-        }
-        
+        public string Description { get; set; }
+
         /// <summary>
-        /// The user message.
+        ///     The user message.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "userMessage")]
-        public string UserMessage
-        {
-            get;
-            set;
-        }
-        
+        public string UserMessage { get; set; }
+
         /// <summary>
-        /// The dateTime.
+        ///     The dateTime.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "dateTime")]
-        public DateTime DateTime
-        {
-            get;
-            set;
-        }
-        
+        public DateTime DateTime { get; set; }
+
         /// <summary>
-        /// The trace ID.
+        ///     The trace ID.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "traceId")]
-        public string TraceId
-        {
-            get;
-            set;
-        }
+        public string TraceId { get; set; }
     }
 }

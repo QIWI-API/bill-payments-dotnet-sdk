@@ -6,22 +6,17 @@ namespace Qiwi.BillPayments.Model.In
 {
     /// <inheritdoc />
     /// <summary>
-    /// The refund request.
+    ///     The refund request.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
     public class RefundBillRequest : FieldsDictionary
     {
         /// <summary>
-        /// The refund amount.
+        ///     The refund amount.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "amount")]
-        public MoneyAmount Amount
-        {
-            get;
-            set;
-        }
-        
+        public MoneyAmount Amount { get; set; }
     }
 }

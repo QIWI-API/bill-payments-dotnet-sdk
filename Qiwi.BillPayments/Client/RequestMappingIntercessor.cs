@@ -10,23 +10,23 @@ using Qiwi.BillPayments.Web;
 namespace Qiwi.BillPayments.Client
 {
     /// <summary>
-    /// API request mapper.
+    ///     API request mapper.
     /// </summary>
     [ComVisible(true)]
     public class RequestMappingIntercessor
     {
         /// <summary>
-        /// The JSON converter.
-        /// </summary>
-        private readonly IObjectMapper _mapper;
-        
-        /// <summary>
-        /// The HTTP client. 
+        ///     The HTTP client.
         /// </summary>
         private readonly IClient _client;
-        
+
         /// <summary>
-        /// The constructor.
+        ///     The JSON converter.
+        /// </summary>
+        private readonly IObjectMapper _mapper;
+
+        /// <summary>
+        ///     The constructor.
         /// </summary>
         /// <param name="client">The HTTP protocol mapper.</param>
         /// <param name="mapper">The JSON object mapper.</param>
@@ -35,9 +35,9 @@ namespace Qiwi.BillPayments.Client
             _client = client;
             _mapper = mapper;
         }
-        
+
         /// <summary>
-        /// Make the API request.
+        ///     Make the API request.
         /// </summary>
         /// <param name="method">The HTTP method.</param>
         /// <param name="url">The endpoint URL.</param>
@@ -59,9 +59,9 @@ namespace Qiwi.BillPayments.Client
         {
             return RequestAsync<T>(method, url, headers, entityOpt).Result;
         }
-        
+
         /// <summary>
-        /// Make the API request asynchronously.
+        ///     Make the API request asynchronously.
         /// </summary>
         /// <param name="method">The HTTP method.</param>
         /// <param name="url">The endpoint URL.</param>
@@ -94,15 +94,17 @@ namespace Qiwi.BillPayments.Client
 
             return DeserializeResponseBody<T>(response);
         }
-        
+
         /// <summary>
-        /// Convert request body object to JSON.
+        ///     Convert request body object to JSON.
         /// </summary>
         /// <param name="entityOpt">The body object.</param>
         /// <returns>The JSON.</returns>
         /// <exception cref="SerializationException">On request body serialization fail.</exception>
         private string SerializeRequestBody(object entityOpt = null)
         {
+            if (entityOpt is string entityString) return entityString;
+
             try
             {
                 return null != entityOpt ? _mapper.WriteValue(entityOpt) : null;
@@ -112,9 +114,9 @@ namespace Qiwi.BillPayments.Client
                 throw new SerializationException(exception);
             }
         }
-        
+
         /// <summary>
-        /// Convert response body JSON to object.
+        ///     Convert response body JSON to object.
         /// </summary>
         /// <param name="response">The response.</param>
         /// <typeparam name="T">The object type.</typeparam>
@@ -123,9 +125,7 @@ namespace Qiwi.BillPayments.Client
         /// <exception cref="BillPaymentsServiceException">On API return error message.</exception>
         private T DeserializeResponseBody<T>(ResponseData response)
         {
-            if (string.IsNullOrEmpty(response.Body)) {
-                throw new BadResponseException(response.HttpStatus);
-            }
+            if (string.IsNullOrEmpty(response.Body)) throw new BadResponseException(response.HttpStatus);
             try
             {
                 return _mapper.ReadValue<T>(response.Body);
@@ -135,9 +135,9 @@ namespace Qiwi.BillPayments.Client
                 throw MapToError(response);
             }
         }
-        
+
         /// <summary>
-        /// Convert error response body JSON to object. 
+        ///     Convert error response body JSON to object.
         /// </summary>
         /// <param name="response">The response.</param>
         /// <returns>The error object.</returns>

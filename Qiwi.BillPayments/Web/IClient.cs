@@ -1,18 +1,18 @@
 using System.Collections.Generic;
-using Qiwi.BillPayments.Model;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Qiwi.BillPayments.Model;
 
 namespace Qiwi.BillPayments.Web
 {
     /// <summary>
-    /// HTTP client interface.
+    ///     HTTP client interface.
     /// </summary>
     [ComVisible(true)]
     public interface IClient
     {
         /// <summary>
-        /// Make HTTP request.
+        ///     Make HTTP request.
         /// </summary>
         /// <param name="method">The HTTP method.</param>
         /// <param name="url">The endpoint URL.</param>
@@ -26,9 +26,9 @@ namespace Qiwi.BillPayments.Web
             IReadOnlyDictionary<string, string> headers,
             string entityOpt = null
         );
-        
+
         /// <summary>
-        /// Make async HTTP request asynchronously.
+        ///     Make async HTTP request asynchronously.
         /// </summary>
         /// <param name="method">The HTTP method.</param>
         /// <param name="url">The endpoint URL.</param>

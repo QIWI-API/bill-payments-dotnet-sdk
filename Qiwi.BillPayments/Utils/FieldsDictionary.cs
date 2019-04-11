@@ -1,20 +1,20 @@
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
 namespace Qiwi.BillPayments.Utils
 {
     /// <summary>
-    /// Dictionary of object fields container.
+    ///     Dictionary of object fields container.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
     public class FieldsDictionary
     {
         /// <summary>
-        /// Get dictionary of object fields.
+        ///     Get dictionary of object fields.
         /// </summary>
         /// <returns>Dictionary of fields.</returns>
         [ComVisible(true)]

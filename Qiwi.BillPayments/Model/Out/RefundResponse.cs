@@ -7,47 +7,35 @@ namespace Qiwi.BillPayments.Model.Out
 {
     /// <inheritdoc />
     /// <summary>
-    /// The refund response.
+    ///     The refund response.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
     public class RefundResponse : FieldsDictionary
     {
         /// <summary>
-        /// The invoice amount.
+        ///     The invoice amount.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "amount")]
-        public MoneyAmount Amount
-        {
-            get;
-            set;
-        }
-        
+        public MoneyAmount Amount { get; set; }
+
         /// <summary>
-        /// The dateTime of refund processing.
+        ///     The dateTime of refund processing.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "dateTime")]
-        public DateTime DateTime
-        {
-            get;
-            set;
-        }
-        
+        public DateTime DateTime { get; set; }
+
         /// <summary>
-        /// Unique refund identifier in merchant’s system.
+        ///     Unique refund identifier in merchant’s system.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "refundId")]
-        public string RefundId
-        {
-            get;
-            set;
-        }
-        
+        public string RefundId { get; set; }
+
         /// <summary>
-        /// The refund status.
+        ///     The refund status.
         /// </summary>
         [ComVisible(true)]
         [DataMember(Name = "status")]
@@ -58,14 +46,10 @@ namespace Qiwi.BillPayments.Model.Out
         }
 
         /// <summary>
-        /// The refund status.
+        ///     The refund status.
         /// </summary>
         [ComVisible(true)]
         [IgnoreDataMember]
-        public RefundStatusEnum StatusEnum
-        {
-            get;
-            set;
-        }
+        public RefundStatusEnum StatusEnum { get; set; }
     }
 }

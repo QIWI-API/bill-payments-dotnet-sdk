@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Qiwi.BillPayments.Utils
 {
     /// <summary>
-    /// Universal object factory.
+    ///     Universal object factory.
     /// </summary>
     /// <typeparam name="TI">The object interface.</typeparam>
     /// <typeparam name="TD">The default object type.</typeparam>
@@ -12,7 +12,7 @@ namespace Qiwi.BillPayments.Utils
     public abstract class AbstractFactory<TI, TD> where TD : class, TI
     {
         /// <summary>
-        /// Build new object instance.
+        ///     Build new object instance.
         /// </summary>
         /// <param name="args">The constructor arguments.</param>
         /// <returns>The object.</returns>
@@ -21,9 +21,9 @@ namespace Qiwi.BillPayments.Utils
         {
             return Create<TD>(args);
         }
-        
+
         /// <summary>
-        /// Build new object instance.
+        ///     Build new object instance.
         /// </summary>
         /// <param name="args">The constructor arguments.</param>
         /// <typeparam name="T">The object type.</typeparam>
@@ -33,7 +33,7 @@ namespace Qiwi.BillPayments.Utils
         {
             try
             {
-                return (T)typeof(T).GetConstructor(args.Select(o => o.GetType()).ToArray())?.Invoke(args);
+                return (T) typeof(T).GetConstructor(args.Select(o => o.GetType()).ToArray())?.Invoke(args);
             }
             catch
             {

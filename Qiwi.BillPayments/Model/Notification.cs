@@ -6,32 +6,24 @@ namespace Qiwi.BillPayments.Model
 {
     /// <inheritdoc />
     /// <summary>
-    /// The invoice payment notification.
+    ///     The invoice payment notification.
     /// </summary>
     [ComVisible(true)]
     [DataContract]
     public class Notification : FieldsDictionary
     {
         /// <summary>
-        /// The invoice.
+        ///     The invoice.
         /// </summary>
         [ComVisible(true)]
         [DataMember]
-        public Bill Bill
-        {
-            get;
-            set;
-        }
-        
+        public Bill Bill { get; set; }
+
         /// <summary>
-        /// The notification version.
+        ///     The notification version.
         /// </summary>
         [ComVisible(true)]
         [DataMember]
-        public string Version
-        {
-            get;
-            set;
-        }
+        public string Version { get; set; }
     }
 }

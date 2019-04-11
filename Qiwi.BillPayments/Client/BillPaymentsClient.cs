@@ -12,39 +12,39 @@ using Qiwi.BillPayments.Web;
 namespace Qiwi.BillPayments.Client
 {
     /// <summary>
-    /// QIWI Universal Payment Protocol API client.
-    /// https://developer.qiwi.com/en/bill-payments/
+    ///     QIWI Universal Payment Protocol API client.
+    ///     https://developer.qiwi.com/en/bill-payments/
     /// </summary>
     [ComVisible(true)]
     public class BillPaymentsClient
     {
         /// <summary>
-        /// The API base URL.
+        ///     The API base URL.
         /// </summary>
         public const string BillsUrl = "https://api.qiwi.com/partner/bill/v1/bills/";
-        
+
         /// <summary>
-        /// The API dateTime format.
+        ///     The API dateTime format.
         /// </summary>
         public const string DateTimeFormat = "yyyy-MM-ddTHH\\:mm\\:ss.fffzzz";
-        
+
         /// <summary>
-        /// The request mapping intercessor.
-        /// </summary>
-        private readonly RequestMappingIntercessor _requestMappingIntercessor;
-        
-        /// <summary>
-        /// The HTTP headers dictionary.
-        /// </summary>
-        private readonly Dictionary<string, string> _headers;
-        
-        /// <summary>
-        /// The API client fingerprint.
+        ///     The API client fingerprint.
         /// </summary>
         private readonly IFingerprint _fingerprint;
-        
+
         /// <summary>
-        /// The constructor.
+        ///     The HTTP headers dictionary.
+        /// </summary>
+        private readonly Dictionary<string, string> _headers;
+
+        /// <summary>
+        ///     The request mapping intercessor.
+        /// </summary>
+        private readonly RequestMappingIntercessor _requestMappingIntercessor;
+
+        /// <summary>
+        ///     The constructor.
         /// </summary>
         /// <param name="secretKey">The merchant secret key.</param>
         /// <param name="requestMappingIntercessor">The API request mapper.</param>
@@ -64,9 +64,9 @@ namespace Qiwi.BillPayments.Client
             _requestMappingIntercessor = requestMappingIntercessor;
             _fingerprint = fingerprint;
         }
-        
+
         /// <summary>
-        /// Append success URL parameter to payment URL in invoice.
+        ///     Append success URL parameter to payment URL in invoice.
         /// </summary>
         /// <param name="response">The invoice.</param>
         /// <param name="successUrl">The success URL.</param>
@@ -76,9 +76,9 @@ namespace Qiwi.BillPayments.Client
         {
             return AppendSuccessUrl<BillResponse>(response, successUrl);
         }
-        
+
         /// <summary>
-        /// Append success URL parameter to payment URL in invoice.
+        ///     Append success URL parameter to payment URL in invoice.
         /// </summary>
         /// <param name="response">The invoice.</param>
         /// <param name="successUrl">The success URL.</param>
@@ -93,9 +93,9 @@ namespace Qiwi.BillPayments.Client
             uriBuilder.Query = parameters.ToString();
             return response.WithPayUrl<T>(uriBuilder.Uri);
         }
-        
+
         /// <summary>
-        /// Get API client fingerprint.
+        ///     Get API client fingerprint.
         /// </summary>
         /// <returns>The fingerprint.</returns>
         [ComVisible(true)]
@@ -103,10 +103,10 @@ namespace Qiwi.BillPayments.Client
         {
             return _fingerprint;
         }
-        
+
         /// <summary>
-        /// Invoice Issue on Pay Form.
-        /// https://developer.qiwi.com/en/bill-payments/#http
+        ///     Invoice Issue on Pay Form.
+        ///     https://developer.qiwi.com/en/bill-payments/#http
         /// </summary>
         /// <param name="paymentInfo">The invoice data.</param>
         /// <param name="customFields">The additional info.</param>
@@ -124,18 +124,11 @@ namespace Qiwi.BillPayments.Client
                 var parameters = HttpUtility.ParseQueryString(uriBuilder.Query);
                 parameters["amount"] = paymentInfo.Amount.ValueString;
                 foreach (var keyValuePair in additional.ToDictionary())
-                {
                     if (null != keyValuePair.Value)
-                    {
                         parameters["customFields[" + keyValuePair.Key + "]"] = keyValuePair.Value.ToString();
-                    }
-                }
                 parameters["publicKey"] = paymentInfo.PublicKey;
                 parameters["billId"] = paymentInfo.BillId;
-                if (null != paymentInfo.SuccessUrl)
-                {
-                    parameters["successUrl"] = paymentInfo.SuccessUrl.ToString();
-                }
+                if (null != paymentInfo.SuccessUrl) parameters["successUrl"] = paymentInfo.SuccessUrl.ToString();
 
                 uriBuilder.Query = parameters.ToString();
                 return uriBuilder.Uri;
@@ -145,10 +138,10 @@ namespace Qiwi.BillPayments.Client
                 throw new UrlEncodingException(e);
             }
         }
-        
+
         /// <summary>
-        /// Invoice issue by API.
-        /// https://developer.qiwi.com/en/bill-payments/#create
+        ///     Invoice issue by API.
+        ///     https://developer.qiwi.com/en/bill-payments/#create
         /// </summary>
         /// <param name="info">The invoice data.</param>
         /// <param name="customFields">The additional fields.</param>
@@ -162,10 +155,10 @@ namespace Qiwi.BillPayments.Client
         {
             return CreateBillAsync<BillResponse>(info, customFields).Result;
         }
-        
+
         /// <summary>
-        /// Invoice issue by API.
-        /// https://developer.qiwi.com/en/bill-payments/#create
+        ///     Invoice issue by API.
+        ///     https://developer.qiwi.com/en/bill-payments/#create
         /// </summary>
         /// <param name="info">The invoice data.</param>
         /// <param name="customFields">The additional info.</param>
@@ -180,10 +173,10 @@ namespace Qiwi.BillPayments.Client
         {
             return CreateBillAsync<T>(info, customFields).Result;
         }
-        
+
         /// <summary>
-        /// Invoice issue by API asynchronously.
-        /// https://developer.qiwi.com/en/bill-payments/#create
+        ///     Invoice issue by API asynchronously.
+        ///     https://developer.qiwi.com/en/bill-payments/#create
         /// </summary>
         /// <param name="info">The invoice data.</param>
         /// <param name="customFields">The additional fields.</param>
@@ -199,8 +192,8 @@ namespace Qiwi.BillPayments.Client
         }
 
         /// <summary>
-        /// Invoice issue by API asynchronously.
-        /// https://developer.qiwi.com/en/bill-payments/#create
+        ///     Invoice issue by API asynchronously.
+        ///     https://developer.qiwi.com/en/bill-payments/#create
         /// </summary>
         /// <param name="info">The invoice data.</param>
         /// <param name="customFields">The additional info.</param>
@@ -226,8 +219,8 @@ namespace Qiwi.BillPayments.Client
         }
 
         /// <summary>
-        /// Checking the invoice status.
-        /// https://developer.qiwi.com/en/bill-payments/#invoice-status
+        ///     Checking the invoice status.
+        ///     https://developer.qiwi.com/en/bill-payments/#invoice-status
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <returns>The invoice.</returns>
@@ -240,10 +233,10 @@ namespace Qiwi.BillPayments.Client
         {
             return GetBillInfoAsync<BillResponse>(billId).Result;
         }
-        
+
         /// <summary>
-        /// Checking the invoice status.
-        /// https://developer.qiwi.com/en/bill-payments/#invoice-status
+        ///     Checking the invoice status.
+        ///     https://developer.qiwi.com/en/bill-payments/#invoice-status
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <typeparam name="T">The result invoice type.</typeparam>
@@ -257,10 +250,10 @@ namespace Qiwi.BillPayments.Client
         {
             return GetBillInfoAsync<T>(billId).Result;
         }
-        
+
         /// <summary>
-        /// Checking the invoice status asynchronously.
-        /// https://developer.qiwi.com/en/bill-payments/#invoice-status
+        ///     Checking the invoice status asynchronously.
+        ///     https://developer.qiwi.com/en/bill-payments/#invoice-status
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <returns>The invoice.</returns>
@@ -273,10 +266,10 @@ namespace Qiwi.BillPayments.Client
         {
             return await GetBillInfoAsync<BillResponse>(billId);
         }
-        
+
         /// <summary>
-        /// Checking the invoice status asynchronously.
-        /// https://developer.qiwi.com/en/bill-payments/#invoice-status
+        ///     Checking the invoice status asynchronously.
+        ///     https://developer.qiwi.com/en/bill-payments/#invoice-status
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <typeparam name="T">The result invoice type.</typeparam>
@@ -294,10 +287,10 @@ namespace Qiwi.BillPayments.Client
                 _headers
             );
         }
-        
+
         /// <summary>
-        /// Cancelling the invoice.
-        /// https://developer.qiwi.com/en/bill-payments/#cancel
+        ///     Cancelling the invoice.
+        ///     https://developer.qiwi.com/en/bill-payments/#cancel
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <returns>The invoice.</returns>
@@ -310,10 +303,10 @@ namespace Qiwi.BillPayments.Client
         {
             return CancelBillAsync<BillResponse>(billId).Result;
         }
-        
+
         /// <summary>
-        /// Cancelling the invoice.
-        /// https://developer.qiwi.com/en/bill-payments/#cancel
+        ///     Cancelling the invoice.
+        ///     https://developer.qiwi.com/en/bill-payments/#cancel
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <typeparam name="T">The result invoice type.</typeparam>
@@ -327,10 +320,10 @@ namespace Qiwi.BillPayments.Client
         {
             return CancelBillAsync<T>(billId).Result;
         }
-        
+
         /// <summary>
-        /// Cancelling the invoice asynchronously.
-        /// https://developer.qiwi.com/en/bill-payments/#cancel
+        ///     Cancelling the invoice asynchronously.
+        ///     https://developer.qiwi.com/en/bill-payments/#cancel
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <returns>The invoice.</returns>
@@ -343,10 +336,10 @@ namespace Qiwi.BillPayments.Client
         {
             return await CancelBillAsync<BillResponse>(billId);
         }
-        
+
         /// <summary>
-        /// Cancelling the invoice asynchronously.
-        /// https://developer.qiwi.com/en/bill-payments/#cancel
+        ///     Cancelling the invoice asynchronously.
+        ///     https://developer.qiwi.com/en/bill-payments/#cancel
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <typeparam name="T">The result invoice type.</typeparam>
@@ -361,13 +354,14 @@ namespace Qiwi.BillPayments.Client
             return await _requestMappingIntercessor.RequestAsync<T>(
                 "POST",
                 BillsUrl + billId + "/reject",
-                _headers
+                _headers,
+                ""
             );
         }
-        
+
         /// <summary>
-        /// Refund issue by API.
-        /// https://developer.qiwi.com/en/bill-payments/#refund
+        ///     Refund issue by API.
+        ///     https://developer.qiwi.com/en/bill-payments/#refund
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -382,10 +376,10 @@ namespace Qiwi.BillPayments.Client
         {
             return RefundBillAsync<RefundResponse>(billId, refundId, amount).Result;
         }
-        
+
         /// <summary>
-        /// Refund issue by API.
-        /// https://developer.qiwi.com/en/bill-payments/#refund
+        ///     Refund issue by API.
+        ///     https://developer.qiwi.com/en/bill-payments/#refund
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -401,10 +395,10 @@ namespace Qiwi.BillPayments.Client
         {
             return RefundBillAsync<T>(billId, refundId, amount).Result;
         }
-        
+
         /// <summary>
-        /// Refund issue by API asynchronously.
-        /// https://developer.qiwi.com/en/bill-payments/#refund
+        ///     Refund issue by API asynchronously.
+        ///     https://developer.qiwi.com/en/bill-payments/#refund
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -419,10 +413,10 @@ namespace Qiwi.BillPayments.Client
         {
             return await RefundBillAsync<RefundResponse>(billId, refundId, amount);
         }
-        
+
         /// <summary>
-        /// Refund issue by API asynchronously.
-        /// https://developer.qiwi.com/en/bill-payments/#refund
+        ///     Refund issue by API asynchronously.
+        ///     https://developer.qiwi.com/en/bill-payments/#refund
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -447,10 +441,10 @@ namespace Qiwi.BillPayments.Client
                 }
             );
         }
-        
+
         /// <summary>
-        /// Checking the refund status.
-        /// https://developer.qiwi.com/en/bill-payments/#refund-status
+        ///     Checking the refund status.
+        ///     https://developer.qiwi.com/en/bill-payments/#refund-status
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -464,10 +458,10 @@ namespace Qiwi.BillPayments.Client
         {
             return GetRefundInfoAsync<RefundResponse>(billId, refundId).Result;
         }
-        
+
         /// <summary>
-        /// Checking the refund status.
-        /// https://developer.qiwi.com/en/bill-payments/#refund-status
+        ///     Checking the refund status.
+        ///     https://developer.qiwi.com/en/bill-payments/#refund-status
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -482,10 +476,10 @@ namespace Qiwi.BillPayments.Client
         {
             return GetRefundInfoAsync<T>(billId, refundId).Result;
         }
-        
+
         /// <summary>
-        /// Checking the refund status asynchronously.
-        /// https://developer.qiwi.com/en/bill-payments/#refund-status
+        ///     Checking the refund status asynchronously.
+        ///     https://developer.qiwi.com/en/bill-payments/#refund-status
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -499,10 +493,10 @@ namespace Qiwi.BillPayments.Client
         {
             return await GetRefundInfoAsync<RefundResponse>(billId, refundId);
         }
-        
+
         /// <summary>
-        /// Checking the refund status asynchronously.
-        /// https://developer.qiwi.com/en/bill-payments/#refund-status
+        ///     Checking the refund status asynchronously.
+        ///     https://developer.qiwi.com/en/bill-payments/#refund-status
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>

@@ -85,6 +85,8 @@ new Uri(
 );
 ```
 
+Возможные исключания: `UrlEncodingException`.
+
 ### Выставление счета
 
 Надежный способ для интеграции.
@@ -172,6 +174,8 @@ new BillResponse
 
 Метод может быть вызван ассинхронно через `CreateBillAsync`.
 
+Возможные исключания: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
+
 ### Информация о счете
 
 Метод `GetBillInfo` возвращает информацию о счете.
@@ -220,6 +224,8 @@ new BillResponse
 ```
 
 Метод может быть вызван ассинхронно через `GetBillInfoAsync`.
+
+Возможные исключания: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
 
 ### Отмена неоплаченного счета
 
@@ -270,6 +276,8 @@ new BillResponse
 
 Метод может быть вызван ассинхронно через `CancelBillAsync`.
 
+Возможные исключания: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
+
 ### Возврат средств
 
 Метод `RefundBill` производит возврат средств.
@@ -311,6 +319,8 @@ new RefundResponse
 
 Метод может быть вызван ассинхронно через `RefundBillAsync`.
 
+Возможные исключания: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
+
 ### Информация о возврате
 
 Метод `GetRefundInfo` запрашивает статус возврата, в параметрах нужно указать:
@@ -345,6 +355,8 @@ new RefundResponse
 
 Метод может быть вызван ассинхронно через `GetRefundInfoAsync`.
 
+Возможные исключания: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
+
 ### Вспомогательные методы
 
 Метод `CheckNotificationSignature` осуществляет проверку подписи при нотификации о новом счете от сервера уведомлений QIWI.
@@ -376,6 +388,8 @@ Assert.IsTrue(
     )
 );
 ```
+
+Возможные исключания: `EncryptionException`.
 
 ### Использование альтернативного обработчика JSON
 
@@ -444,14 +458,40 @@ BillPaymentClientFactory.Create(
 
 ## Работа с ошибками
 
+Данная библиотека не берет на себя обработку исключительных ситуаций, при ее использовании следует определить и перехватывать возможные исключительные ситуации самостоятельно.
 При использовании SDK в нештатных ситуациях могут возникать следующие исключения из пространства имен `Qiwi.BillPayments.Exception`:
 
-* `BadResponseException` - полученные от API данные не могут быть корректно разобраны в объект из JSON;
-* `BillPaymentsServiceException` - от API получено сообщение об ошибке;
-* `EncryptionException` - невозможно получить хэш строки, алгоритм не поддерживается или не задан секретный ключ;
-* `HttpClientException` - невозможно выполнить запрос к API, ошибка клиента;
-* `SerializationException` - передаваемые в API данные не могут быть корректно сериализованы в JSON;
-* `UrlEncodingException` - невозможно сформировать корректный URL.
+### `BadResponseException`
+
+Возникает, если ответ сервера получен, но не содержит корректный JSON.
+Обьект сообщения типа `ResponseData` можно получить из поля `Response`.
+Код ответа HTTP можно получить из поля `HttpStatus`.
+
+### `BillPaymentsServiceException`
+
+Возникает, если от API получено сообщение об ошибке.
+Обьект сообщения типа `ErrorResponse` можно получить из поля `Response`.
+Код ответа HTTP можно получить из поля `HttpStatus`.
+
+### `EncryptionException`
+
+Возникает, если невозможно получить хэш строки, алгоритм не поддерживается или не задан секретный ключ.
+Содержит сообщение и строит стек вызовов от оригинальной ошибки.
+
+### `HttpClientException`
+
+Возникает, если невозможно выполнить запрос к API, ошибка HTTP клиента.
+Содержит сообщение и строит стек вызовов от оригинальной ошибки.
+
+### `SerializationException`
+
+Возникает, если передаваемые в API данные не могут быть корректно сериализованы в JSON.
+Содержит сообщение и строит стек вызовов от оригинальной ошибки.
+
+### `UrlEncodingException`
+
+Возникает, если невозможно сформировать корректный URL.
+Содержит сообщение и строит стек вызовов от оригинальной ошибки.
 
 ## Требования
 

@@ -22,10 +22,10 @@
         <PackageId>Qiwi.BillPayments</PackageId>
         <PackageTags>qiwi sdk</PackageTags>
         <PackageIconUrl>https://avatars1.githubusercontent.com/u/29546240?s=140</PackageIconUrl>
-        <PackageProjectUrl>https://github.com/QIWI-API/bill-payments-dotcore-sdk</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/QIWI-API/bill-payments-dotnet-sdk</PackageProjectUrl>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <RepositoryUrl>https://github.com/QIWI-API/bill-payments-dotcore-sdk.git</RepositoryUrl>
+        <RepositoryUrl>https://github.com/QIWI-API/bill-payments-dotnet-sdk.git</RepositoryUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.xml;.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>

@@ -1,6 +1,10 @@
 using System;
+using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Qiwi.BillPayments.Client;
+using Qiwi.BillPayments.Json;
 using Qiwi.BillPayments.Model;
+using Qiwi.BillPayments.Model.Out;
 using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Tests.Utils
@@ -70,6 +74,28 @@ namespace Qiwi.BillPayments.Tests.Utils
             Assert.IsTrue(
                 BillPaymentsUtils.CheckNotificationSignature(signature, notification, merchantSecret),
                 "Valid signature check success"
+            );
+        }
+
+        [TestMethod]
+        [DataRow(637069201877600000L, "2019-10-17T17:43:07.760+03:00")]
+        public void TestParseDate(long ticks, string date)
+        {
+            Assert.AreEqual(
+                ticks,
+                BillPaymentsUtils.ParseDate(date).ToUniversalTime().Ticks,
+                "Parse date check"
+            );
+        }
+
+        [TestMethod]
+        [DataRow("2019-10-17T09:43:07.760+00:00", 637069201877600000L)]
+        public void TestFormatDate(string date, long ticks)
+        {
+            Assert.AreEqual(
+                date,
+                BillPaymentsUtils.FormatDate(new DateTime(ticks).ToUniversalTime()),
+                "Format date check"
             );
         }
     }

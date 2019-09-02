@@ -26,7 +26,7 @@ namespace Qiwi.BillPayments.Client
         /// <summary>
         ///     The API dateTime format.
         /// </summary>
-        public const string DateTimeFormat = "yyyy-MM-ddTHH\\:mm\\:ss.fffzzz";
+        public const string DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffzzz";
 
         /// <summary>
         ///     The API client fingerprint.

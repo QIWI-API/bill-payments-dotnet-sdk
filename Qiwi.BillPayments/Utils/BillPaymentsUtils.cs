@@ -68,7 +68,11 @@ namespace Qiwi.BillPayments.Utils
         [ComVisible(true)]
         public static DateTime ParseDate(string dateTime)
         {
-            return DateTime.ParseExact(dateTime, BillPaymentsClient.DateTimeFormat, CultureInfo.InvariantCulture);
+            return DateTime.Parse(
+                dateTime,
+                DateTimeFormatInfo.InvariantInfo,
+                DateTimeStyles.AdjustToUniversal
+            );
         }
 
         /// <summary>
@@ -79,7 +83,7 @@ namespace Qiwi.BillPayments.Utils
         [ComVisible(true)]
         public static string FormatDate(DateTime dateTime)
         {
-            return dateTime.ToString(BillPaymentsClient.DateTimeFormat);
+            return dateTime.ToString(BillPaymentsClient.DateTimeFormat, DateTimeFormatInfo.InvariantInfo);
         }
 
         /// <summary>

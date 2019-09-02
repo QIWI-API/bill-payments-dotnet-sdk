@@ -99,7 +99,8 @@ namespace Qiwi.BillPayments.Tests.Client
             Assert.AreEqual(createBillInfo.Amount.CurrencyEnum, billResponse.Amount.CurrencyEnum,
                 "Same amount currency");
             Assert.AreEqual(createBillInfo.Comment, billResponse.Comment, "Same comment");
-            Assert.AreEqual(createBillInfo.ExpirationDateTime, billResponse.ExpirationDateTime,
+            Assert.AreEqual(createBillInfo.ExpirationDateTime.ToUniversalTime().Ticks,
+                billResponse.ExpirationDateTime.ToUniversalTime().Ticks,
                 "Same expiration dateTime");
             Assert.AreEqual(createBillInfo.Customer.Email, billResponse.Customer.Email, "Same email");
             Assert.AreEqual(createBillInfo.Customer.Account, billResponse.Customer.Account, "Same account");
@@ -117,13 +118,16 @@ namespace Qiwi.BillPayments.Tests.Client
             Assert.AreEqual(bill.Amount.ValueDecimal, billResponse.Amount.ValueDecimal, "Same amount value");
             Assert.AreEqual(bill.Amount.CurrencyEnum, billResponse.Amount.CurrencyEnum, "Same amount currency");
             Assert.AreEqual(bill.Comment, billResponse.Comment, "Same comment");
-            Assert.AreEqual(bill.ExpirationDateTime, billResponse.ExpirationDateTime, "Same expiration dateTime");
+            Assert.AreEqual(bill.ExpirationDateTime.ToUniversalTime().Ticks,
+                billResponse.ExpirationDateTime.ToUniversalTime().Ticks, "Same expiration dateTime");
             Assert.AreEqual(bill.Customer.Email, billResponse.Customer.Email, "Same email");
             Assert.AreEqual(bill.Customer.Account, billResponse.Customer.Account, "Same account");
             Assert.AreEqual(bill.Customer.Phone, billResponse.Customer.Phone, "Same phone");
             Assert.AreEqual(bill.SiteId, billResponse.SiteId, "Same site id");
-            Assert.AreEqual(bill.CreationDateTime, billResponse.CreationDateTime, "Same creation dateTime");
-            Assert.AreEqual(bill.Status.ChangedDateTime, billResponse.Status.ChangedDateTime,
+            Assert.AreEqual(bill.CreationDateTime.ToUniversalTime().Ticks,
+                billResponse.CreationDateTime.ToUniversalTime().Ticks, "Same creation dateTime");
+            Assert.AreEqual(bill.Status.ChangedDateTime.ToUniversalTime().Ticks,
+                billResponse.Status.ChangedDateTime.ToUniversalTime().Ticks,
                 "Same status changed dateTime");
             Assert.AreEqual(bill.Status.ValueEnum, billResponse.Status.ValueEnum, "Same status value");
             Assert.AreEqual(bill.CustomFields.ApiClient, billResponse.CustomFields.ApiClient, "Api client preset");
@@ -137,12 +141,14 @@ namespace Qiwi.BillPayments.Tests.Client
             Assert.AreEqual(bill.Amount.ValueDecimal, billResponse.Amount.ValueDecimal, "Same amount value");
             Assert.AreEqual(bill.Amount.CurrencyEnum, billResponse.Amount.CurrencyEnum, "Same amount currency");
             Assert.AreEqual(bill.Comment, billResponse.Comment, "Same comment");
-            Assert.AreEqual(bill.ExpirationDateTime, billResponse.ExpirationDateTime, "Same expiration dateTime");
+            Assert.AreEqual(bill.ExpirationDateTime.ToUniversalTime().Ticks,
+                billResponse.ExpirationDateTime.ToUniversalTime().Ticks, "Same expiration dateTime");
             Assert.AreEqual(bill.Customer.Email, billResponse.Customer.Email, "Same email");
             Assert.AreEqual(bill.Customer.Account, billResponse.Customer.Account, "Same account");
             Assert.AreEqual(bill.Customer.Phone, billResponse.Customer.Phone, "Same phone");
             Assert.AreEqual(bill.SiteId, billResponse.SiteId, "Same site id");
-            Assert.AreEqual(bill.CreationDateTime, billResponse.CreationDateTime, "Same creation dateTime");
+            Assert.AreEqual(bill.CreationDateTime.ToUniversalTime().Ticks,
+                billResponse.CreationDateTime.ToUniversalTime().Ticks, "Same creation dateTime");
             Assert.AreNotEqual(bill.Status.ValueEnum, billResponse.Status.ValueEnum, "Same status value");
             Assert.AreEqual(bill.CustomFields.ApiClient, billResponse.CustomFields.ApiClient, "Api client preset");
             Assert.AreEqual(bill.CustomFields.ApiClientVersion, billResponse.CustomFields.ApiClientVersion,

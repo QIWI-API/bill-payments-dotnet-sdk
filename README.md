@@ -493,6 +493,23 @@ BillPaymentClientFactory.Create(
 Возникает, если невозможно сформировать корректный URL.
 Содержит сообщение и строит стек вызовов от оригинальной ошибки.
 
+### TRY...CATCH
+
+Запросы выполняются в отдельном потоке, даже если используется синхронная форма вызова метода.
+Таким образом, перехват исключений должен использовать класс `AggregateException` для обьекта ошибки.
+
+```C#
+try
+{
+    client.CreateBill(billInfo);
+}
+catch (AggregateException aggregateException)
+{
+    var exception = exception.GetBaseException();
+    // exception - исходная ошибка, которую следует обработать
+}
+```
+
 ## Требования
 
 * **.Net Standart 2.0** или **.Net Core 2.0** или **.Net Framework 4.5**

@@ -1,10 +1,6 @@
 using System;
-using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Qiwi.BillPayments.Client;
-using Qiwi.BillPayments.Json;
 using Qiwi.BillPayments.Model;
-using Qiwi.BillPayments.Model.Out;
 using Qiwi.BillPayments.Utils;
 
 namespace Qiwi.BillPayments.Tests.Utils

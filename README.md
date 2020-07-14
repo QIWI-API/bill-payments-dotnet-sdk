@@ -279,6 +279,7 @@ new BillResponse
 Возможные исключания: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
 
 ### Возврат средств
+#### ! Метод недоступен для физических лиц
 
 Метод `RefundBill` производит возврат средств.
 В параметрах нужно указать:
@@ -322,6 +323,7 @@ new RefundResponse
 Возможные исключания: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
 
 ### Информация о возврате
+#### ! Метод недоступен для физических лиц
 
 Метод `GetRefundInfo` запрашивает статус возврата, в параметрах нужно указать:
 

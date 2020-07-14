@@ -362,6 +362,7 @@ namespace Qiwi.BillPayments.Client
         /// <summary>
         ///     Refund issue by API.
         ///     https://developer.qiwi.com/en/bill-payments/#refund
+        ///     Method is not available for individuals
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -380,6 +381,7 @@ namespace Qiwi.BillPayments.Client
         /// <summary>
         ///     Refund issue by API.
         ///     https://developer.qiwi.com/en/bill-payments/#refund
+        ///     Method is not available for individuals
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -399,6 +401,7 @@ namespace Qiwi.BillPayments.Client
         /// <summary>
         ///     Refund issue by API asynchronously.
         ///     https://developer.qiwi.com/en/bill-payments/#refund
+        ///     Method is not available for individuals
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -417,6 +420,7 @@ namespace Qiwi.BillPayments.Client
         /// <summary>
         ///     Refund issue by API asynchronously.
         ///     https://developer.qiwi.com/en/bill-payments/#refund
+        ///     Method is not available for individuals
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -445,6 +449,7 @@ namespace Qiwi.BillPayments.Client
         /// <summary>
         ///     Checking the refund status.
         ///     https://developer.qiwi.com/en/bill-payments/#refund-status
+        ///     Method is not available for individuals
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -462,6 +467,7 @@ namespace Qiwi.BillPayments.Client
         /// <summary>
         ///     Checking the refund status.
         ///     https://developer.qiwi.com/en/bill-payments/#refund-status
+        ///     Method is not available for individuals
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -480,6 +486,7 @@ namespace Qiwi.BillPayments.Client
         /// <summary>
         ///     Checking the refund status asynchronously.
         ///     https://developer.qiwi.com/en/bill-payments/#refund-status
+        ///     Method is not available for individuals
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>
@@ -497,6 +504,7 @@ namespace Qiwi.BillPayments.Client
         /// <summary>
         ///     Checking the refund status asynchronously.
         ///     https://developer.qiwi.com/en/bill-payments/#refund-status
+        ///     Method is not available for individuals
         /// </summary>
         /// <param name="billId">The invoice identifier.</param>
         /// <param name="refundId">The refund identifier.</param>

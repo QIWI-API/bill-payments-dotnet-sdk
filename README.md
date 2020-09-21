@@ -86,7 +86,7 @@ new Uri(
 );
 ```
 
-Возможные исключания: `UrlEncodingException`.
+Возможные исключения: `UrlEncodingException`.
 
 ### Выставление счета
 
@@ -175,7 +175,7 @@ new BillResponse
 
 Метод может быть вызван ассинхронно через `CreateBillAsync`.
 
-Возможные исключания: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
+Возможные исключения: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
 
 ### Информация о счете
 
@@ -226,7 +226,7 @@ new BillResponse
 
 Метод может быть вызван ассинхронно через `GetBillInfoAsync`.
 
-Возможные исключания: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
+Возможные исключения: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
 
 ### Отмена неоплаченного счета
 
@@ -277,7 +277,7 @@ new BillResponse
 
 Метод может быть вызван ассинхронно через `CancelBillAsync`.
 
-Возможные исключания: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
+Возможные исключения: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
 
 ### Возврат средств
 #### ! Метод недоступен для физических лиц
@@ -321,7 +321,7 @@ new RefundResponse
 
 Метод может быть вызван ассинхронно через `RefundBillAsync`.
 
-Возможные исключания: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
+Возможные исключения: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
 
 ### Информация о возврате
 #### ! Метод недоступен для физических лиц
@@ -358,7 +358,7 @@ new RefundResponse
 
 Метод может быть вызван ассинхронно через `GetRefundInfoAsync`.
 
-Возможные исключания: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
+Возможные исключения: `SerializationException`, `HttpClientException`, `BadResponseException`, `BillPaymentsServiceException`.
 
 ### Вспомогательные методы
 
@@ -387,12 +387,12 @@ Assert.IsTrue(
             ),
             Version = "1"
         },
-        merchantSecret: "test-merchant-secret-for-signature-check"
+        secretKey: "eyJ2ZXJzaW9uIjoicmVzdF92MyIsImRhdGEiOnsibWVyY2hhbnRfaWQiOjUyNjgxMiwiYXBpX3VzZXJfaWQiOjcxNjI2MTk3LCJzZWNyZXQiOiJmZjBiZmJiM2UxYzc0MjY3YjIyZDIzOGYzMDBkNDhlYjhiNTnONPININONPN090MTg5Z**********************"
     )
 );
 ```
 
-Возможные исключания: `EncryptionException`.
+Возможные исключения: `EncryptionException`.
 
 ### Использование альтернативного обработчика JSON
 

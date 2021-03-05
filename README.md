@@ -8,7 +8,7 @@
 
 ## Подключение
 
-Установка с помощью Nuget:
+Установка с помощью [Nuget](https://www.nuget.org/downloads):
 
 ```bash
 nuget install Qiwi.BillPayments
@@ -16,12 +16,13 @@ nuget install Qiwi.BillPayments
 
 ## Документация
 
-**API P2P-счетов (для физических лиц)**: https://developer.qiwi.com/ru/p2p-payments
+**Пошаговое руководство по работе с SDK (для физических лиц)**: https://developer.qiwi.com/ru/p2p-sdk-guide/#integration-sdk <br>
+**API P2P-счетов (для физических лиц)**: https://developer.qiwi.com/ru/p2p-payments <br>
 **API QIWI Кассы (для юридических лиц)**: https://developer.qiwi.com/ru/bill-payments
 
 ## Авторизация
 
-Для использования SDK требуется `secretKey`, подробности в [документации](https://developer.qiwi.com/ru/bill-payments/#auth).
+Для использования SDK требуется `secretKey`, подробности в документации — [для физ.лиц](https://developer.qiwi.com/ru/p2p-payments/#auth), [для юр.лиц](https://developer.qiwi.com/ru/bill-payments/#auth).
 
 ```c#
 var client = BillPaymentClientFactory.Create(
@@ -31,7 +32,7 @@ var client = BillPaymentClientFactory.Create(
 
 ## Примеры
 
-По-умолчанию пользователю доступно несколько способов оплаты.
+По умолчанию пользователю доступно несколько способов оплаты.
 В платежной форме параметры счета передаются в открытом виде в ссылке.
 Далее клиенту отображается форма с выбором способа оплаты.
 При использовании этого способа нельзя гарантировать, что все счета выставлены мерчантом, в отличие от выставления по API.
@@ -48,7 +49,7 @@ var client = BillPaymentClientFactory.Create(
 Метод `CreatePaymentForm` создает платежную форму. В параметрах нужно указать:
 
 * данные для создания платежной формы `paymentInfo`, включая:
-  * ключ идентификации провайдера, полученный в QIWI Кассы, `PublicKey`;
+  * ключ идентификации провайдера `PublicKey`, полученный в личном кабинете QIWI;
   * идентификатор счета `BillId` внутри вашей системы;
   * сумму `Amount`;
   * не обязательный адрес перехода после успешной оплаты `SuccessUrl`;
@@ -56,7 +57,7 @@ var client = BillPaymentClientFactory.Create(
   * персонализация платежной формы `ThemeCode`.
 
 В результате будет получена ссылка на форму оплаты, которую можно передать клиенту.
-Подробнее о доступных параметрах в [документации](https://developer.qiwi.com/ru/bill-payments/#http).
+Подробнее о доступных параметрах в документации — [для физ. лиц](https://developer.qiwi.com/ru/p2p-payments/#http), [для юр. лиц](https://developer.qiwi.com/ru/bill-payments/#http).
 
 ```c#
 client.CreatePaymentForm(
@@ -108,7 +109,8 @@ new Uri(
   * персонализация платежной формы `ThemeCode`.
 
 В результате будет получен ответ с данными о выставленном счете.
-Подробнее о доступных параметрах в [документации](https://developer.qiwi.com/ru/bill-payments/#create).
+Подробное описание параметров для выставления счёта представлено в [руководстве по работе с SDK](https://developer.qiwi.com/ru/p2p-sdk-guide/#step4), а так же в документации [для физ.лиц](https://developer.qiwi.com/ru/p2p-payments/#create) и [для юр. лиц](https://developer.qiwi.com/ru/bill-payments/#create)
+
 
 ```c#
 client.CreateBill(
@@ -181,7 +183,7 @@ new BillResponse
 
 Метод `GetBillInfo` возвращает информацию о счете.
 В параметрах нужно указать идентификатор счета `billId` внутри вашей системы, в результате будет получен ответ со статусом счета.
-Подробнее в [документации](https://developer.qiwi.com/ru/bill-payments/#invoice-status).
+Подробнее в документации — [для физ.лиц](https://developer.qiwi.com/ru/p2p-payments/#invoice-status), [для юр.лиц](https://developer.qiwi.com/ru/bill-payments/#invoice-status).
 
 ```c#
 client.GetBillInfo(
@@ -232,7 +234,7 @@ new BillResponse
 
 Метод `CancelBill` отменяет неоплаченный счет.
 В параметрах нужно указать идентификатор счета `billId` внутри вашей системы, в результате будет получен ответ с информацией о счете.
-Подробнее в [документации](https://developer.qiwi.com/ru/bill-payments/#cancel).
+Подробнее в документации — [для физ.лиц](https://developer.qiwi.com/ru/p2p-payments/#cancel), [для юр.лиц](https://developer.qiwi.com/ru/bill-payments/#cancel).
 
 ```c#
 client.CancelBill(

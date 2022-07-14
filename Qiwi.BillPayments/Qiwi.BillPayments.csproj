@@ -44,6 +44,7 @@
             <Pack>true</Pack>
             <Link>README.md</Link>
         </Content>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net45'" />
         <Reference Include="System.Web" Condition="'$(TargetFramework)' == 'net45'" />
     </ItemGroup>

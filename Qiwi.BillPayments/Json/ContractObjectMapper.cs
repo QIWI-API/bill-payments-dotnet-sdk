@@ -32,17 +32,8 @@ namespace Qiwi.BillPayments.Json
         [ComVisible(true)]
         public T ReadValue<T>(string body)
         {
-            try
-            {
-                var value = JsonConvert.DeserializeObject<T>(body);
-                return value;
-            }
-
-            catch (System.Exception ex)
-            {
-                System.Console.WriteLine(ex);
-                throw;
-            }
+            var value = JsonConvert.DeserializeObject<T>(body);
+            return value;
         }
     }
 }
